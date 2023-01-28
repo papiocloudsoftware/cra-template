@@ -1,0 +1,68 @@
+/* Default all margins/padding to 0 and center align */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* Ensure outer elements take up full space */
+html, body, #root, #app {
+    height: 100%;
+    width: 100%;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 350;
+    font-size: 16px;
+    background-color: white;
+}
+
+div.container {
+    display: block;
+}
+
+div.container > * {
+    margin: 6px 0px;
+}
+
+div.container > *:first-child {
+    margin-top: 0px;
+}
+
+div.container > *:last-child {
+    margin-bottom: 0px;
+}
+
+span.container {
+    display: inline-flex;
+}
+
+span.container > * {
+    margin: auto 6px;
+}
+
+span.container > *:first-child {
+    margin-left: 0px;
+}
+
+span.container > *:last-child {
+    margin-right: 0px;
+}
+
+table {
+    width: 100%;
+}
+
+tr > * {
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+tr > *:first-child {
+    padding-left: 0px;
+}
+
+tr > *:last-child {
+    padding-right: 0px;
+}
+
+svg {
+    vertical-align: middle;
+}
