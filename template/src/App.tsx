@@ -14,7 +14,8 @@ const useStyles = makeStyles({
   content: {
     padding: "1rem",
     overflowX: "scroll",
-    flexGrow: 1
+    flexGrow: 1,
+    transition: "margin-left 225ms"
   },
   appBar: {
     display: "flex !important",
