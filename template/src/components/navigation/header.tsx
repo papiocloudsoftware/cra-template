@@ -7,16 +7,14 @@ import { useLocation } from "react-router-dom";
 import { RouteDetails } from "../../routes";
 import { ColorPalette } from "../../style/color-palete";
 import { SquareLogo } from "../logos";
-import { StyledTooltip } from "../styled/styled-tooltip";
+import { HeaderAction } from "./header-action";
 import { HomeLink } from "./links";
+import { UserManagement } from "./user-management";
 
 const useStyles = makeStyles({
   group: {
-    paddingLeft: "6px !important",
-    "& > *": {
-      marginLeft: "6px",
-      marginRight: "6px"
-    }
+    paddingLeft: "0px !important",
+    paddingRight: "0px !important"
   },
   toolbarNavigationItems: {
     display: "flex",
@@ -25,12 +23,13 @@ const useStyles = makeStyles({
     alignItems: "center"
   },
   toolbarUserItems: {
-    width: "100px",
+    display: "flex",
+    height: "100%",
     marginRight: 0,
     marginLeft: "auto"
   },
   menuIcon: {
-    color: "white",
+    color: "inherit",
     "&:hover": {
       cursor: "pointer"
     }
@@ -40,21 +39,16 @@ const useStyles = makeStyles({
     height: "48px"
   },
   route: {
-    display: "flex",
-    borderBottomStyle: "solid",
+    borderStyle: "solid !important",
     borderBottomWidth: "0px",
     borderBottomColor: ColorPalette.primaryColorLight,
-    borderTopStyle: "solid",
     borderTopWidth: "0px",
-    borderTopColor: `${ColorPalette.primaryColorLight}00`,
-    height: "calc(100% - 6px)",
+    borderTopColor: `${ColorPalette.primaryColorLight}00 !important`,
+    height: "calc(100% - 12px) !important",
     alignItems: "center",
     paddingTop: "4px",
     paddingBottom: "4px",
-    transition: "border 0.5s, background-color 0.25s",
-    "&:hover": {
-      backgroundColor: "#ffffff33"
-    }
+    transition: "border 0.5s, background-color 0.25s !important"
   },
   activeRoute: {
     borderBottomWidth: "4px !important",
@@ -63,7 +57,6 @@ const useStyles = makeStyles({
   },
   routeLink: {
     display: "flex",
-    width: "100%",
     height: "100%",
     alignItems: "center"
   }
@@ -75,6 +68,7 @@ interface NavigationItemsProps {
 
 function NavigationItems(props: NavigationItemsProps) {
   const styles = useStyles();
+  const spacing = " ".repeat(2);
   return (
     <div className={styles.toolbarNavigationItems}>
       {Object.keys(RouteDetails)
@@ -86,13 +80,15 @@ function NavigationItems(props: NavigationItemsProps) {
             classes.push(styles.activeRoute);
           }
           return (
-            <div key={key} className={classes.join(" ")}>
+            <HeaderAction key={key} className={classes.join(" ")} description={routeDetail.Details}>
               <routeDetail.Link className={styles.routeLink}>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                {routeDetail.Text}
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span style={{ whiteSpace: "pre-wrap" }}>
+                  {spacing}
+                  {routeDetail.Text}
+                  {spacing}
+                </span>
               </routeDetail.Link>
-            </div>
+            </HeaderAction>
           );
         })}
     </div>
@@ -123,16 +119,25 @@ export function Header(props: HeaderProps) {
 
   return (
     <Toolbar className={styles.group}>
-      <StyledTooltip title={props.menuVisible ? "Hide navigation menu" : "Show navigation menu"}>
-        <MenuIcon className={styles.menuIcon} onClick={props.toggleMenu} />
-      </StyledTooltip>
-      <div className={homeLinkClasses.join(" ")}>
+      <HeaderAction
+        onClick={props.toggleMenu}
+        description={props.menuVisible ? "Hide navigation menu" : "Show navigation menu"}
+      >
+        <MenuIcon className={styles.menuIcon} />
+      </HeaderAction>
+      <HeaderAction
+        className={homeLinkClasses.join(" ")}
+        description={RouteDetails.Home.Details}
+        style={{ paddingLeft: "4px", paddingRight: "4px" }}
+      >
         <HomeLink className={styles.routeLink}>
           <SquareLogo className={styles.logo} />
         </HomeLink>
-      </div>
+      </HeaderAction>
       <NavigationItems activeRoute={activeRouteKey} />
-      <div className={styles.toolbarUserItems}></div>
+      <div className={styles.toolbarUserItems}>
+        <UserManagement />
+      </div>
     </Toolbar>
   );
 }

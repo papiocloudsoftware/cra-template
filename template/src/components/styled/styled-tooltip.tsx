@@ -5,7 +5,7 @@ import { PropsWithChildren } from "react";
 
 export function StyledTooltip(props: PropsWithChildren<TooltipProps>) {
   return (
-    <Tooltip enterDelay={500} {...props}>
+    <Tooltip arrow enterDelay={500} enterNextDelay={500} {...props}>
       {props.children}
     </Tooltip>
   );

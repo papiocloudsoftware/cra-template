@@ -20,7 +20,7 @@ const useStyles = makeStyles({
   appBar: {
     display: "flex !important",
     justifyContent: "center !important",
-    height: "56px !important",
+    height: "48px !important",
     zIndex: "2 !important"
   }
 });

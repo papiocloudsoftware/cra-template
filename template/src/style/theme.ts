@@ -13,5 +13,10 @@ export const appTheme = createTheme({
       primary: ColorPalette.primaryColorDark,
       secondary: ColorPalette.white
     }
+  },
+  typography: {
+    button: {
+      textTransform: "none"
+    }
   }
 });

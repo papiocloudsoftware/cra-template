@@ -1,5 +1,5 @@
 /**
- * Combines the className from the the properties passed in with the classes passed into the function to create a
+ * Combines the className from the properties passed in with the classes passed into the function to create a
  * new className property with all combined classes
  *
  * @param props
