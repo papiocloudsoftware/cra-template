@@ -13,9 +13,6 @@ import { HomeLink } from "./links";
 const useStyles = makeStyles({
   group: {
     paddingLeft: "6px !important",
-    "&:first-child": {
-      marginLeft: "12px"
-    },
     "& > *": {
       marginLeft: "6px",
       marginRight: "6px"
@@ -25,13 +22,7 @@ const useStyles = makeStyles({
     display: "flex",
     width: "100%",
     height: "100%",
-    alignItems: "center",
-    "& > *": {
-      marginLeft: "10px",
-      paddingLeft: "13px",
-      marginRight: "10px",
-      paddingRight: "13px"
-    }
+    alignItems: "center"
   },
   toolbarUserItems: {
     width: "100px",
@@ -59,37 +50,48 @@ const useStyles = makeStyles({
     height: "calc(100% - 6px)",
     alignItems: "center",
     paddingTop: "4px",
-    paddingBottom: "4px"
+    paddingBottom: "4px",
+    transition: "border 0.5s, background-color 0.25s",
+    "&:hover": {
+      backgroundColor: "#ffffff33"
+    }
   },
   activeRoute: {
+    borderBottomWidth: "4px !important",
+    borderBottomColor: `${ColorPalette.primaryColorLight} !important`,
+    borderTopWidth: "4px !important"
+  },
+  routeLink: {
     display: "flex",
-    borderBottomStyle: "solid",
-    borderBottomWidth: "4px",
-    borderBottomColor: ColorPalette.primaryColorLight,
-    borderTopStyle: "solid",
-    borderTopWidth: "4px",
-    borderTopColor: `${ColorPalette.primaryColorLight}00`,
-    height: "calc(100% - 6px)",
-    alignItems: "center",
-    paddingTop: "4px",
-    paddingBottom: "4px"
+    width: "100%",
+    height: "100%",
+    alignItems: "center"
   }
 });
 
-function NavigationItems() {
-  const location = useLocation();
-  const styles = useStyles();
+interface NavigationItemsProps {
+  readonly activeRoute?: string;
+}
 
+function NavigationItems(props: NavigationItemsProps) {
+  const styles = useStyles();
   return (
     <div className={styles.toolbarNavigationItems}>
       {Object.keys(RouteDetails)
         .filter((key) => key !== "Home")
         .map((key) => {
           const routeDetail = RouteDetails[key];
-          const className = location.pathname.startsWith(routeDetail.Path) ? styles.activeRoute : styles.route;
+          const classes = [styles.route];
+          if (key === props.activeRoute) {
+            classes.push(styles.activeRoute);
+          }
           return (
-            <div key={key} className={className} style={{ transition: "border 0.5s" }}>
-              <routeDetail.Link>{routeDetail.Text}</routeDetail.Link>
+            <div key={key} className={classes.join(" ")}>
+              <routeDetail.Link className={styles.routeLink}>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {routeDetail.Text}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              </routeDetail.Link>
             </div>
           );
         })}
@@ -106,18 +108,30 @@ export interface HeaderProps {
 }
 
 export function Header(props: HeaderProps) {
+  const location = useLocation();
   const styles = useStyles();
   const MenuIcon = props.menuVisible ? MenuOpenOutlined : MenuOutlined;
+
+  const homeLinkClasses = [styles.route];
+  const activeRouteKey = Object.keys(RouteDetails).find(
+    (key) => key !== "Home" && location.pathname.startsWith(RouteDetails[key].Path)
+  );
+  console.log(activeRouteKey);
+  if (!activeRouteKey) {
+    homeLinkClasses.push(styles.activeRoute);
+  }
 
   return (
     <Toolbar className={styles.group}>
       <StyledTooltip title={props.menuVisible ? "Hide navigation menu" : "Show navigation menu"}>
         <MenuIcon className={styles.menuIcon} onClick={props.toggleMenu} />
       </StyledTooltip>
-      <HomeLink>
-        <SquareLogo className={styles.logo} />
-      </HomeLink>
-      <NavigationItems />
+      <div className={homeLinkClasses.join(" ")}>
+        <HomeLink className={styles.routeLink}>
+          <SquareLogo className={styles.logo} />
+        </HomeLink>
+      </div>
+      <NavigationItems activeRoute={activeRouteKey} />
       <div className={styles.toolbarUserItems}></div>
     </Toolbar>
   );

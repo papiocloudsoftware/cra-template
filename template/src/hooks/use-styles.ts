@@ -5,8 +5,7 @@ export const useStyles = makeStyles({
     color: "inherit",
     textDecoration: "none",
     "&:hover": {
-      cursor: "pointer",
-      textDecoration: "underline"
+      cursor: "pointer"
     }
   },
   inputField: {
