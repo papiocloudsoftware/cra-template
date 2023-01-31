@@ -7,19 +7,28 @@ import ListItemText from "@mui/material/ListItemText";
 import React, { useCallback } from "react";
 
 import { AppRoute, RouteDetails } from "../../../routes";
-import { SignInLink } from "../links";
+import { ColorPalette } from "../../../style/color-palete";
+import { SignInAction } from "../../sign-in/sign-in-action";
+import { SignInIcon } from "../../sign-in/sign-in-icon";
+import { StyledTooltip } from "../../styled/styled-tooltip";
 
 interface NavigationItemProps {
-  readonly text: string;
-  readonly icon: icons.SvgIconComponent;
+  readonly route: AppRoute;
 }
 
 function NavigationItem(props: NavigationItemProps) {
+  const route = props.route;
   return (
-    <ListItemButton>
-      <ListItemIcon style={{ margin: "auto" }}>{<props.icon />}</ListItemIcon>
-      <ListItemText primary={props.text} />
-    </ListItemButton>
+    <StyledTooltip title={route.Details} placement={"right"}>
+      <route.Link>
+        <ListItemButton color={ColorPalette.primaryColorDark}>
+          <ListItemIcon style={{ margin: "auto" }}>
+            <route.Icon style={{ color: ColorPalette.primaryColorDark }} />
+          </ListItemIcon>
+          <ListItemText primary={route.Text} />
+        </ListItemButton>
+      </route.Link>
+    </StyledTooltip>
   );
 }
 
@@ -32,7 +41,7 @@ export interface MenuItemsProps {
 }
 
 export function MenuItems(props: MenuItemsProps) {
-  const menuRoutes: AppRoute[] = props.routes || [RouteDetails.Home];
+  const menuRoutes: AppRoute[] = props.routes || Object.values(RouteDetails);
 
   const signInCallback = useCallback(() => {
     if (props.signInCallback) {
@@ -44,16 +53,21 @@ export function MenuItems(props: MenuItemsProps) {
     <Box className={""} sx={{ margin: "-3px 0", overflow: "auto" }}>
       <List sx={{ padding: "0" }}>
         {menuRoutes.map((route, index) => (
-          <route.Link key={index}>
-            <NavigationItem text={route.Text} icon={route.Icon} />
-          </route.Link>
+          <NavigationItem key={index} route={route} />
         ))}
       </List>
       <Divider />
       <List sx={{ padding: "0" }}>
-        <SignInLink onClick={signInCallback}>
-          <NavigationItem text={"Sign In"} icon={icons.Login} />
-        </SignInLink>
+        <SignInAction>
+          <StyledTooltip title={"Sign in to begin"} placement={"right"}>
+            <ListItemButton color={ColorPalette.primaryColorDark}>
+              <ListItemIcon style={{ margin: "auto" }}>
+                <SignInIcon style={{ color: ColorPalette.primaryColorDark }} />
+              </ListItemIcon>
+              <ListItemText primary={"Sign In"} />
+            </ListItemButton>
+          </StyledTooltip>
+        </SignInAction>
       </List>
     </Box>
   );

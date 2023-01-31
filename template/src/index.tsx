@@ -1,6 +1,5 @@
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import React from "react";
-import ReactDOM from "react-dom";
 import { createRoot } from "react-dom/client";
 
 import App from "./App";
@@ -15,12 +14,12 @@ if (process.env.NODE_ENV === "development") {
 const entryPoint = document.getElementById("root");
 const root = createRoot(entryPoint!);
 root.render(
-  <React.StrictMode>
+  <>
     <CssBaseline />
     <ThemeProvider theme={appTheme}>
       <CurrentUserStateProvider>
         <App />
       </CurrentUserStateProvider>
     </ThemeProvider>
-  </React.StrictMode>
+  </>
 );

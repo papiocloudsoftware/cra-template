@@ -1,9 +1,9 @@
-import { Button, ButtonBase } from "@mui/material";
+import { Button } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React, { HTMLAttributes, PropsWithChildren } from "react";
 
-import { useClasses } from "../../hooks/use-classes";
-import { StyledTooltip } from "../styled/styled-tooltip";
+import { useClasses } from "../../../hooks/use-classes";
+import { StyledTooltip } from "../../styled/styled-tooltip";
 
 const useStyles = makeStyles({
   action: {

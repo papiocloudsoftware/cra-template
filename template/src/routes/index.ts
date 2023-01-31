@@ -31,7 +31,7 @@ export const RouteDetails: { [key: string]: AppRoute } = {
     Route: routes.Route1,
     Path: links.route1Path,
     Link: links.Route1Link,
-    Icon: icons.Home,
+    Icon: icons.BookmarksSharp,
     Details: "Go to the 1st route"
   },
   Route2: {
@@ -39,7 +39,7 @@ export const RouteDetails: { [key: string]: AppRoute } = {
     Route: routes.Route2,
     Path: links.route2Path,
     Link: links.Route2Link,
-    Icon: icons.Home,
+    Icon: icons.BugReport,
     Details: "Go to the 2nd route"
   },
   Route3: {
@@ -47,7 +47,7 @@ export const RouteDetails: { [key: string]: AppRoute } = {
     Route: routes.Route3,
     Path: links.route3Path,
     Link: links.Route3Link,
-    Icon: icons.Home,
+    Icon: icons.Camera,
     Details: "Go to the 3rd route"
   }
 };

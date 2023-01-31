@@ -6,12 +6,15 @@ export const appTheme = createTheme({
   palette: {
     primary: {
       main: ColorPalette.primaryColorDark,
-      dark: ColorPalette.primaryColorDark
+      contrastText: ColorPalette.white
     },
-    secondary: { main: ColorPalette.primaryColorLight },
+    secondary: {
+      main: ColorPalette.primaryColorLight,
+      contrastText: ColorPalette.white
+    },
     text: {
       primary: ColorPalette.primaryColorDark,
-      secondary: ColorPalette.white
+      secondary: ColorPalette.primaryColorLight
     }
   },
   typography: {
