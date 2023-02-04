@@ -1,4 +1,4 @@
-import { KeyboardArrowLeft, MenuOpenOutlined, MenuOutlined } from "@mui/icons-material";
+import { KeyboardArrowLeft } from "@mui/icons-material";
 import { Toolbar } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React from "react";

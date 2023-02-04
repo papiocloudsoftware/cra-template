@@ -36,14 +36,15 @@ const useStyles = makeStyles({
 /** Props to create StyledOverlay */
 export interface StyledOverlayProps {
   readonly visible: boolean;
-  readonly onClose: () => void;
+  readonly onClose?: () => void;
   readonly closeButton?: boolean;
   readonly closeButtonColor?: string;
 }
 
 export function StyledOverlay(props: PropsWithChildren<StyledOverlayProps>) {
   const styles = useStyles();
-  const focusClose = props.closeButton ? undefined : props.onClose;
+  const closeButton = props.closeButton || props.closeButtonColor;
+  const focusClose = closeButton ? undefined : props.onClose;
 
   let Content = <Card className={styles.content}>{props.children}</Card>;
 
@@ -51,7 +52,11 @@ export function StyledOverlay(props: PropsWithChildren<StyledOverlayProps>) {
     Content = (
       <div style={{ position: "relative", overflow: "scroll" }}>
         {Content}
-        <Close style={{ color: props.closeButtonColor }} className={styles.closeButton} onClick={props.onClose} />
+        <Close
+          style={{ color: props.closeButtonColor, transition: "opacity 0.25s" }}
+          className={styles.closeButton}
+          onClick={props.onClose}
+        />
       </div>
     );
   }

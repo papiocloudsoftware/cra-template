@@ -1,8 +1,8 @@
 import React, { HTMLAttributes } from "react";
 
 import { useCurrentUser } from "../../../hooks/use-current-user";
-import { SignInAction } from "../../sign-in/sign-in-action";
-import { SignInIcon } from "../../sign-in/sign-in-icon";
+import { SignInAction } from "../../user/sign-in-action";
+import { SignInIcon } from "../../user/sign-in-icon";
 import { HeaderAction } from "./header-action";
 
 /** Props to create UserManagement */

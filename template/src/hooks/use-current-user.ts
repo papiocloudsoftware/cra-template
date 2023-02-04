@@ -1,4 +1,4 @@
-import { CurrentUser } from "../service/application-types";
+import { CurrentUser } from "../service/user-types";
 import { useCurrentUserState } from "./use-current-user-state";
 
 export function useCurrentUser(): CurrentUser | undefined {

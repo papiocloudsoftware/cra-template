@@ -3,7 +3,7 @@ import { createServer, Request } from "miragejs";
 import { AnyRegistry } from "miragejs/-types";
 import Schema from "miragejs/orm/schema";
 
-import { AccessTokenPayload, AuthTokens, LoginPostBody, UserData } from "./application-types";
+import { AccessTokenPayload, AuthTokens, LoginPostBody, UserData } from "./user-types";
 
 export function mockServer() {
   createServer({

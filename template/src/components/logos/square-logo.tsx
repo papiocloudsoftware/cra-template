@@ -7,10 +7,10 @@ const darkTextlogo = require("../../images/square-logo-dark-text.png");
  * Props to create BannerLogo
  */
 export interface SquareLogoProps extends ImgHTMLAttributes<HTMLImageElement> {
-  readonly textMode?: "light" | "dark";
+  readonly mode?: "light" | "dark";
 }
 
 export function SquareLogo(props: SquareLogoProps) {
-  const logo = props.textMode === "dark" ? darkTextlogo : lightTextlogo;
+  const logo = props.mode === "dark" ? darkTextlogo : lightTextlogo;
   return <img src={logo} {...props}></img>;
 }
