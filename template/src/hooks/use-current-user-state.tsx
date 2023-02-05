@@ -9,10 +9,11 @@ type Callback = (prevState?: CurrentUser) => CurrentUser;
  */
 export interface CurrentUserState {
   readonly currentUser?: CurrentUser;
-  readonly setCurrentUser?: (arg: CurrentUser | undefined | Callback) => void;
+  readonly setCurrentUser: (arg: CurrentUser | undefined | Callback) => void;
 }
 
-const CurrentUserContext = React.createContext<CurrentUserState>({});
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const CurrentUserContext = React.createContext<CurrentUserState>({ setCurrentUser: () => {} });
 
 export function useCurrentUserState(): CurrentUserState {
   return useContext(CurrentUserContext);

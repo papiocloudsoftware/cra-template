@@ -1,6 +1,5 @@
 import React from "react";
 
-import { ColorPalette } from "../../style/color-palete";
 import { StyledOverlay, StyledOverlayProps } from "../styled/styled-overlay";
 import { SignInDialog } from "./sign-in-dialog";
 
@@ -11,7 +10,7 @@ export interface SignInOverlayProps
 
 export function SignInOverlay(props: SignInOverlayProps) {
   return (
-    <StyledOverlay closeButtonColor={ColorPalette.white} {...props}>
+    <StyledOverlay {...props}>
       <SignInDialog onClose={props.onClose} />
     </StyledOverlay>
   );

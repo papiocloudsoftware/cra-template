@@ -1,8 +1,6 @@
-import * as jose from "jose";
-
 import { CurrentUserState } from "../hooks/use-current-user-state";
 import { BaseService } from "./base-service";
-import { AccessTokenPayload, AuthTokens, LoginPostBody } from "./user-types";
+import { AuthTokens, LoginPostBody, ResetPasswordPostBody, UserData } from "./user-types";
 
 export class UserService extends BaseService {
   constructor(currentUserState: CurrentUserState) {
@@ -10,9 +8,6 @@ export class UserService extends BaseService {
   }
 
   async login(username: string, password: string): Promise<boolean> {
-    if (!this.currentUserState.setCurrentUser) {
-      return false;
-    }
     const postBody: LoginPostBody = {
       username,
       password
@@ -22,10 +17,10 @@ export class UserService extends BaseService {
       body: JSON.stringify(postBody)
     });
     if (response.ok) {
-      const authTokens = (await response.json()) as AuthTokens;
-      if (authTokens.access_token) {
-        const accessTokenData = jose.decodeJwt(authTokens.access_token) as AccessTokenPayload;
-        this.currentUserState.setCurrentUser({ authTokens, userData: accessTokenData });
+      await this.storeAuthTokens(response);
+      const userData = await this.getUserData();
+      if (userData) {
+        this.currentUserState.setCurrentUser({ userData, requestedTime: new Date() });
         return true;
       }
     }
@@ -33,14 +28,33 @@ export class UserService extends BaseService {
   }
 
   async logout(): Promise<boolean> {
-    if (!this.currentUserState.setCurrentUser) {
-      return false;
-    }
-    const response = await fetch(`${BaseService.API_BASE_PATH}/logout`, { method: "POST" });
+    const response = await fetch(`${UserService.API_BASE_PATH}/logout`, { method: "POST" });
     if (response.ok) {
-      if (this.currentUserState.setCurrentUser) {
-        this.currentUserState.setCurrentUser(undefined);
-      }
+      localStorage.removeItem(UserService.AUTHORIZATION_KEY);
+      this.currentUserState.setCurrentUser(undefined);
+      return true;
+    }
+    return false;
+  }
+
+  async getUserData(): Promise<UserData | undefined> {
+    const response = await this.fetch(`${UserService.API_BASE_PATH}/user`);
+    if (response.ok) {
+      return (await response.json()) as UserData;
+    }
+    return undefined;
+  }
+
+  async resetPassword(username: string): Promise<boolean> {
+    const postBody: ResetPasswordPostBody = {
+      username
+    };
+    const response = await fetch(`${BaseService.API_BASE_PATH}/reset-password`, {
+      method: "POST",
+      body: JSON.stringify(postBody)
+    });
+    if (response.ok) {
+      this.currentUserState.setCurrentUser(undefined);
       return true;
     }
     return false;

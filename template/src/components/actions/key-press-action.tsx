@@ -12,10 +12,8 @@ export function KeyPressAction(props: PropsWithChildren<KeyPressActionProps>) {
 
   const onKeyUp = useCallback(
     (e: KeyboardEvent<HTMLDivElement>) => {
-      console.log("KEY DETECTED!");
       const action = props.actions[e.key];
       if (action) {
-        console.log(`Triggering action for ${e.key}`);
         action();
       } else if (props.onKeyUp) {
         props.onKeyUp(e);

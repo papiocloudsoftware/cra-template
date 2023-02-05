@@ -1,5 +1,5 @@
 import { Close } from "@mui/icons-material";
-import { Card, Fade, Modal } from "@mui/material";
+import { Card, CardProps, Fade, Modal } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import React, { PropsWithChildren } from "react";
 
@@ -34,7 +34,7 @@ const useStyles = makeStyles({
 });
 
 /** Props to create StyledOverlay */
-export interface StyledOverlayProps {
+export interface StyledOverlayProps extends CardProps {
   readonly visible: boolean;
   readonly onClose?: () => void;
   readonly closeButton?: boolean;
@@ -43,19 +43,22 @@ export interface StyledOverlayProps {
 
 export function StyledOverlay(props: PropsWithChildren<StyledOverlayProps>) {
   const styles = useStyles();
-  const closeButton = props.closeButton || props.closeButtonColor;
-  const focusClose = closeButton ? undefined : props.onClose;
 
-  let Content = <Card className={styles.content}>{props.children}</Card>;
+  const { visible, onClose, closeButton, closeButtonColor, ...cardProps } = props;
 
-  if (props.closeButton || props.closeButtonColor) {
+  const showCloseButton = closeButton || closeButtonColor !== undefined;
+  const focusClose = showCloseButton ? undefined : onClose;
+
+  let Content = <Card className={styles.content} {...cardProps} />;
+
+  if (showCloseButton) {
     Content = (
       <div style={{ position: "relative", overflow: "scroll" }}>
         {Content}
         <Close
-          style={{ color: props.closeButtonColor, transition: "opacity 0.25s" }}
+          style={{ color: closeButtonColor, transition: "opacity 0.25s" }}
           className={styles.closeButton}
-          onClick={props.onClose}
+          onClick={onClose}
         />
       </div>
     );
@@ -64,12 +67,12 @@ export function StyledOverlay(props: PropsWithChildren<StyledOverlayProps>) {
   return (
     <Modal
       className={styles.overlay}
-      open={props.visible}
+      open={visible}
       onClose={focusClose}
       closeAfterTransition
       slotProps={{ backdrop: { timeout: 250 } }}
     >
-      <Fade in={props.visible} timeout={250}>
+      <Fade in={visible} timeout={250}>
         {Content}
       </Fade>
     </Modal>

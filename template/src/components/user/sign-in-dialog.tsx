@@ -1,5 +1,14 @@
 import { AccountCircle, Lock, SvgIconComponent } from "@mui/icons-material";
-import { Checkbox, FormControlLabel, InputAdornment, TextField } from "@mui/material";
+import {
+  Alert,
+  AlertColor,
+  Checkbox,
+  Fade,
+  FormControlLabel,
+  InputAdornment,
+  OutlinedTextFieldProps,
+  TextField
+} from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import { capitalCase } from "change-case";
 import Color from "color";
@@ -64,32 +73,31 @@ const useStyles = makeStyles({
     "& button": {
       width: "100px"
     }
+  },
+  alert: {
+    position: "absolute",
+    maxWidth: "80%",
+    top: "12px"
   }
 });
 
-interface FieldInputProps {
+interface FieldInputProps extends Omit<OutlinedTextFieldProps, "variant"> {
   readonly type: "email" | "password";
   readonly Icon: SvgIconComponent;
-  readonly autoFocus?: boolean;
-  readonly onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  readonly onBlur?: () => void;
-  readonly error?: string;
+  readonly errorMessage?: string;
 }
 
 function FieldInput(props: FieldInputProps) {
+  const { Icon, errorMessage, ...fieldProps } = props;
   return (
     <TextField
       required
       color="secondary"
       size="small"
-      autoFocus={props.autoFocus}
       style={{ width: "100%" }}
-      type={props.type}
       label={capitalCase(props.type)}
-      onChange={props.onChange}
-      onBlur={props.onBlur}
-      error={props.error !== undefined}
-      helperText={props.error}
+      error={errorMessage !== undefined}
+      helperText={errorMessage}
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
@@ -97,6 +105,7 @@ function FieldInput(props: FieldInputProps) {
           </InputAdornment>
         )
       }}
+      {...fieldProps}
     />
   );
 }
@@ -118,31 +127,83 @@ interface SignInState {
   readonly rememberMe: boolean;
   readonly forgotPassword: boolean;
   readonly loggingIn: boolean;
-  readonly errorMessage?: string;
+  readonly showAlert: boolean;
+  readonly alertSeverity?: AlertColor;
+  readonly alertMessage?: string;
   readonly progressHeight?: number;
 }
 
+const rememberedUserKey = "rememberedUser";
+
 export function SignInDialog(props: SignInDialogProps) {
   const [state, setState] = useState<SignInState>({
+    email: localStorage.getItem(rememberedUserKey) ?? undefined,
     rememberMe: true,
     forgotPassword: false,
-    loggingIn: false
+    loggingIn: false,
+    showAlert: false
   });
   const styles = useStyles();
   const userService = new UserService(useCurrentUserState());
 
   const loginRef = useRef<HTMLButtonElement>(null);
 
-  const doLogin = useCallback(async () => {
-    setState((prevState) => ({ ...prevState, loggingIn: true }));
+  const ackAlert = useCallback(() => {
+    setState((prevState) => ({ ...prevState, showAlert: false }));
+  }, []);
+
+  const resetPassword = useCallback(async () => {
+    const success = await userService.resetPassword(state.email!);
+    if (success) {
+      setState((prevState) => ({
+        ...prevState,
+        loggingIn: false,
+        forgotPassword: false,
+        showAlert: true,
+        alertMessage: "An email has been sent with instructions on how to reset your password.",
+        alertSeverity: "info"
+      }));
+    } else {
+      setState((prevState) => ({
+        ...prevState,
+        loggingIn: false,
+        showAlert: true,
+        alertMessage: "There was an issue resetting your password, reach out to support for further help.",
+        alertSeverity: "error"
+      }));
+    }
+  }, [userService, state.email]);
+
+  const login = useCallback(async () => {
     const success = await userService.login(state.email!, state.password!);
     if (success) {
-      setState((prevState) => ({ ...prevState, loggingIn: false, errorMessage: undefined }));
+      setState((prevState) => ({ ...prevState, loggingIn: false }));
+      if (state.rememberMe) {
+        localStorage.setItem(rememberedUserKey, state.email!);
+      } else {
+        localStorage.removeItem(rememberedUserKey);
+      }
       props.onClose();
     } else {
-      setState((prevState) => ({ ...prevState, loggingIn: false, errorMessage: "Incorrect email or password" }));
+      setState((prevState) => ({
+        ...prevState,
+        loggingIn: false,
+        showAlert: true,
+        alertMessage: "Incorrect email or password.",
+        alertSeverity: "error"
+      }));
     }
-  }, [userService, state.email, state.password]);
+  }, [userService, state.email, state.password, props.onClose]);
+
+  const doSubmit = useCallback(async () => {
+    setState((prevState) => ({ ...prevState, loggingIn: true }));
+
+    if (state.forgotPassword) {
+      await resetPassword();
+    } else {
+      await login();
+    }
+  }, [resetPassword, login]);
 
   const handleEmailInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const email = e.target.value !== "" ? e.target.value : undefined;
@@ -168,7 +229,7 @@ export function SignInDialog(props: SignInDialogProps) {
     setState((prevState) => ({ ...prevState, rememberMe: e.target.checked }));
   }, []);
   const handleForgotPasswordInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    setState((prevState) => ({ ...prevState, forgotPassword: e.target.checked }));
+    setState((prevState) => ({ ...prevState, forgotPassword: e.target.checked, password: undefined }));
   }, []);
 
   const autoSubmitCheck = useCallback(() => {
@@ -185,6 +246,11 @@ export function SignInDialog(props: SignInDialogProps) {
 
   return (
     <KeyPressAction className={styles.dialog} actions={{ Enter: autoSubmitCheck }}>
+      <Fade className={styles.alert} in={state.showAlert} timeout={250}>
+        <Alert onClose={ackAlert} severity={state.alertSeverity}>
+          {state.alertMessage}
+        </Alert>
+      </Fade>
       <SquareLogo mode={"light"} className={styles.logo} />
       <div className={styles.input}>
         <FieldInput
@@ -192,15 +258,19 @@ export function SignInDialog(props: SignInDialogProps) {
           Icon={AccountCircle}
           onChange={handleEmailInput}
           onBlur={validateEmailInput}
-          error={state.emailValidation}
-          autoFocus
+          errorMessage={state.emailValidation}
+          autoFocus={state.email === undefined}
+          value={state.email || ""}
         />
         <FieldInput
           type="password"
           Icon={Lock}
           onChange={handlePasswordInput}
           onBlur={validatePasswordInput}
-          error={state.passwordValidation}
+          errorMessage={state.passwordValidation}
+          autoFocus={state.email !== undefined}
+          disabled={state.forgotPassword}
+          value={state.password || ""}
         />
       </div>
       <div className={styles.options}>
@@ -220,10 +290,10 @@ export function SignInDialog(props: SignInDialogProps) {
           disabled={!loginEnabled}
           mode="light"
           size="medium"
-          onClick={doLogin}
+          onClick={doSubmit}
           showProgressOnClick
         >
-          Login
+          {state.forgotPassword ? "Reset" : "Login"}
         </StyledButton>
         <StyledButton mode="dark" size="medium" onClick={props.onClose}>
           Cancel

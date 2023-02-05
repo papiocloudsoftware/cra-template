@@ -79,7 +79,6 @@ export interface MenuItemsProps {
 
 export function MenuItems(props: MenuItemsProps) {
   const currentUser = useCurrentUser();
-  console.log(JSON.stringify(currentUser));
   const menuRoutes: AppRoute[] = props.routes || Object.values(RouteDetails);
 
   const UserList = currentUser ? SignedInItems : SignedOutItems;

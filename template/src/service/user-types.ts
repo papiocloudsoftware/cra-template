@@ -1,3 +1,5 @@
+import { JWTPayload } from "jose";
+
 import { ApplicationSettings } from "./application-types";
 
 /**
@@ -19,9 +21,32 @@ export interface User {
 }
 
 /**
+ * Base payload stored in all tokens
+ */
+export interface TokenPayload extends JWTPayload, User {
+  readonly type: "access" | "id" | "refresh";
+}
+
+/**
  * Payload data stored in the access token
  */
-export interface AccessTokenPayload extends User {}
+export interface AccessTokenPayload extends TokenPayload {
+  readonly type: "access";
+}
+
+/**
+ * Payload data stored in the id token
+ */
+export interface IdTokenPayload extends TokenPayload {
+  readonly type: "id";
+}
+
+/**
+ * Payload data stored in the refresh token
+ */
+export interface RefreshTokenPayload extends TokenPayload {
+  readonly type: "refresh";
+}
 
 /**
  * Data about a user
@@ -35,9 +60,8 @@ export interface UserData extends User {
  * Currently logged in user data
  */
 export interface CurrentUser {
-  readonly requestedTime?: Date;
-  readonly userData?: UserData;
-  readonly authTokens?: AuthTokens;
+  readonly requestedTime: Date;
+  readonly userData: UserData;
 }
 
 /**
@@ -46,11 +70,7 @@ export interface CurrentUser {
 export interface AuthTokens {
   readonly token_type?: string;
   readonly access_token?: string;
-  readonly expires_in?: number;
   readonly id_token?: string;
-  readonly expires_in_id?: number;
-  readonly refresh_token?: string;
-  readonly expires_in_refresh?: number;
 }
 
 /**
@@ -59,4 +79,11 @@ export interface AuthTokens {
 export interface LoginPostBody {
   readonly username?: string;
   readonly password?: string;
+}
+
+/**
+ * POST body for /reset-password
+ */
+export interface ResetPasswordPostBody {
+  readonly username?: string;
 }

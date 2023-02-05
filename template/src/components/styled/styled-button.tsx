@@ -117,7 +117,8 @@ interface StyledButtonState {
 export function StyledButton(props: StyledButtonProps) {
   const theme = useTheme();
   const [state, setState] = useState<StyledButtonState>({ clicked: false });
-  const ref: RefObject<HTMLButtonElement> = props.innerRef || useRef<HTMLButtonElement>(null);
+  const { innerRef, children, showProgressOnClick, ...buttonProps } = props;
+  const ref: RefObject<HTMLButtonElement> = innerRef || useRef<HTMLButtonElement>(null);
 
   const onClick = useCallback(
     async (e: MouseEvent<HTMLButtonElement>) => {
@@ -130,7 +131,7 @@ export function StyledButton(props: StyledButtonProps) {
         setTimeout(() => setState((prevState) => ({ ...prevState, clicked: false })), 500);
       }
     },
-    [props.onClick, ref.current, props.showProgressOnClick]
+    [props.onClick, ref.current, showProgressOnClick]
   );
 
   const modeProps: ModeProps = colorModeStyling[props.color || "primary"] || {};
@@ -139,11 +140,6 @@ export function StyledButton(props: StyledButtonProps) {
   const modeSx: SystemStyleObject<Theme> = modeProps[mode || "dark"] || {};
   const propsSx: SystemStyleObject<Theme> = resolveSxProps(theme, props.sx) ?? {};
   const sx: SystemStyleObject<Theme> = deepMerge(modeSx, propsSx) || {};
-
-  console.log(props.children);
-  console.log(JSON.stringify(propsSx));
-
-  const { innerRef, children, ...buttonProps } = props;
 
   return (
     <Button
@@ -155,7 +151,7 @@ export function StyledButton(props: StyledButtonProps) {
       ref={ref}
       onClick={onClick}
     >
-      {state.clicked && props.showProgressOnClick ? (
+      {state.clicked && showProgressOnClick ? (
         <CircularProgress size={state.progressHeight} style={{ color: (sx as CSSProperties).color }} />
       ) : (
         children
