@@ -7,7 +7,6 @@ import React from "react";
 
 import { useCurrentUser } from "../../../hooks/use-current-user";
 import { AppRoute, RouteDetails } from "../../../routes";
-import { ColorPalette } from "../../../style/color-palete";
 import { StyledTooltip } from "../../styled/styled-tooltip";
 import { SignInAction } from "../../user/sign-in-action";
 import { SignInIcon } from "../../user/sign-in-icon";
@@ -24,9 +23,9 @@ function NavigationItem(props: NavigationItemProps) {
     <StyledTooltip title={route.Details} placement={"right"}>
       <div>
         <route.Link>
-          <ListItemButton color={ColorPalette.primaryColorDark}>
+          <ListItemButton>
             <ListItemIcon style={{ margin: "auto" }}>
-              <route.Icon style={{ color: ColorPalette.primaryColorDark }} />
+              <route.Icon />
             </ListItemIcon>
             <ListItemText primary={route.Text} />
           </ListItemButton>
@@ -41,9 +40,9 @@ function SignedInItems(props: ListProps) {
     <List {...props}>
       <StyledTooltip title={"Done? Sign out to finish"} placement={"right"}>
         <SignOutAction>
-          <ListItemButton color={ColorPalette.primaryColorDark}>
+          <ListItemButton>
             <ListItemIcon style={{ margin: "auto" }}>
-              <SignInIcon style={{ color: ColorPalette.primaryColorDark }} />
+              <SignInIcon />
             </ListItemIcon>
             <ListItemText primary={"Sign Out"} />
           </ListItemButton>
@@ -58,9 +57,9 @@ function SignedOutItems(props: ListProps) {
     <List {...props}>
       <StyledTooltip title={"Sign in to begin"} placement={"right"}>
         <SignInAction>
-          <ListItemButton color={ColorPalette.primaryColorDark}>
+          <ListItemButton>
             <ListItemIcon style={{ margin: "auto" }}>
-              <SignOutIcon style={{ color: ColorPalette.primaryColorDark }} />
+              <SignOutIcon />
             </ListItemIcon>
             <ListItemText primary={"Sign In"} />
           </ListItemButton>
@@ -71,7 +70,7 @@ function SignedOutItems(props: ListProps) {
 }
 
 /**
- * Properties for MenuItems
+ * Properties for ListItemButtons
  */
 export interface MenuItemsProps {
   readonly routes?: AppRoute[];

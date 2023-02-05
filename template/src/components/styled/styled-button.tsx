@@ -1,40 +1,17 @@
 import { Button, ButtonProps, CircularProgress } from "@mui/material";
 import { Theme, useTheme } from "@mui/material/styles";
 import { SxProps } from "@mui/system";
-import { SystemStyleObject } from "@mui/system/styleFunctionSx/styleFunctionSx";
 import React, { CSSProperties, MouseEvent, RefObject, useCallback, useRef, useState } from "react";
 
+import { useSxMerge } from "../../hooks/use-sx-merge";
 import { ColorPalette } from "../../style/color-palete";
-
-function deepMerge<T extends object>(...objects: T[]): T {
-  const result: any = {};
-
-  for (const object of objects) {
-    for (const k of Object.keys(object)) {
-      const key = k as keyof T;
-      // If object[key] is an object we may need to deep merge
-      if (typeof object[key] === "object") {
-        // eslint-disable-next-line max-depth
-        if (result[key] === undefined || result[key] === null) {
-          result[key] = object[key];
-        } else {
-          result[key] = deepMerge(result[key], object[key]);
-        }
-      } else {
-        result[key] = object[key];
-      }
-    }
-  }
-
-  return result as T;
-}
 
 enum Mode {
   light = "light",
   dark = "dark"
 }
 type ModeProps = {
-  [key in Mode]?: SystemStyleObject<Theme>;
+  [key in Mode]?: SxProps<Theme>;
 };
 
 const colorModeStyling: { [key: string]: ModeProps | undefined } = {
@@ -92,16 +69,6 @@ const colorModeStyling: { [key: string]: ModeProps | undefined } = {
   }
 };
 
-function resolveSxProps(theme: Theme, sx?: SxProps<Theme>): SystemStyleObject<Theme> {
-  if (!sx) {
-    return {};
-  }
-  if (typeof sx === "function") {
-    return sx(theme) as SystemStyleObject<Theme>;
-  }
-  return sx as SystemStyleObject<Theme>;
-}
-
 /** Props to create StyledButton */
 export interface StyledButtonProps extends ButtonProps {
   readonly mode?: Mode | "light" | "dark";
@@ -117,6 +84,7 @@ interface StyledButtonState {
 export function StyledButton(props: StyledButtonProps) {
   const theme = useTheme();
   const [state, setState] = useState<StyledButtonState>({ clicked: false });
+  const sxMerge = useSxMerge();
   const { innerRef, children, showProgressOnClick, ...buttonProps } = props;
   const ref: RefObject<HTMLButtonElement> = innerRef || useRef<HTMLButtonElement>(null);
 
@@ -137,9 +105,7 @@ export function StyledButton(props: StyledButtonProps) {
   const modeProps: ModeProps = colorModeStyling[props.color || "primary"] || {};
   const mode = props.mode as Mode;
   // Merge styling from props
-  const modeSx: SystemStyleObject<Theme> = modeProps[mode || "dark"] || {};
-  const propsSx: SystemStyleObject<Theme> = resolveSxProps(theme, props.sx) ?? {};
-  const sx: SystemStyleObject<Theme> = deepMerge(modeSx, propsSx) || {};
+  const sx = sxMerge.mergeSx(theme, modeProps[mode || "dark"], props.sx);
 
   return (
     <Button

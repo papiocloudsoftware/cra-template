@@ -1,5 +1,5 @@
 import { CurrentUserState } from "../hooks/use-current-user-state";
-import { AccessTokenPayload, AuthTokens } from "./user-types";
+import { AuthTokens } from "./user-types";
 
 export abstract class BaseService {
   static readonly AUTHORIZATION_KEY = "authorization";
