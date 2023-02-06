@@ -1,0 +1,41 @@
+name: Deploy to Test
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Deploy Website
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v2
+
+      # checkout the cdk deploy action
+      - name: Checkout AWS Website Deploy Action
+        uses: actions/checkout@v2
+        with:
+          repository: papiocloudsoftware/aws-cdk-github-actions
+          token: ${{ secrets.ORG_READ_TOKEN }}
+          path: .github/actions/aws-cdk-github-actions
+
+      - name: Build App
+        run: yarn && yarn build
+
+      - name: Deploy to Production
+        uses: ./.github/actions/aws-cdk-github-actions
+        with:
+          app: static-website
+          command: deploy
+          awsRoleArn: ${{ secrets.TEST_ACCOUNT_ROLE_ARN }}
+          orgReadToken: ${{ secrets.ORG_READ_TOKEN }}
+        env:
+          APP_NAME: ${{ github.event.repository.name }}
+          DOMAIN_NAME: test.papiocloud.com
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
