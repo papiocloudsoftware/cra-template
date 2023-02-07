@@ -14,7 +14,7 @@
     "devDependencies": {
       "@storybook/react": "^6.5.15",
       "@testing-library/jest-dom": "^5.16.5",
-      "@testing-library/react": "^13.4.0",
+      "@testing-library/react": "^12.1.5",
       "@testing-library/user-event": "^14.4.3",
       "@types/color": "^3.0.3",
       "@types/jest": "^29.2.6",
