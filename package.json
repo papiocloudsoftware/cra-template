@@ -14,5 +14,16 @@
   },
   "devDependencies": {
     "semantic-release": "^19.0.5" 
+  },
+  "release": {
+    "branches": ["master"],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/npm"
+    ]
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
