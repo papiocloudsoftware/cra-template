@@ -1,6 +1,6 @@
 import { CurrentUserState } from "../hooks/use-current-user-state";
 import { BaseService } from "./base-service";
-import { AuthTokens, LoginPostBody, ResetPasswordPostBody, UserData } from "./user-types";
+import { LoginPostBody, ResetPasswordPostBody, UserData } from "./user-types";
 
 export class UserService extends BaseService {
   constructor(currentUserState: CurrentUserState) {

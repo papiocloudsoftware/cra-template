@@ -101,7 +101,7 @@ function FieldInput(props: FieldInputProps) {
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
-            <props.Icon style={{ color: ColorPalette.primaryColorLight }} />
+            <Icon style={{ color: ColorPalette.primaryColorLight }} />
           </InputAdornment>
         )
       }}
