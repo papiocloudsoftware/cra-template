@@ -1,6 +1,6 @@
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import React from "react";
-import { createRoot } from "react-dom/client";
+import ReactDOM from "react-dom";
 
 import App from "./App";
 import { CurrentUserStateProvider } from "./hooks/use-current-user-state";
@@ -12,8 +12,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 const entryPoint = document.getElementById("root");
-const root = createRoot(entryPoint!);
-root.render(
+ReactDOM.render(
   <>
     <CssBaseline />
     <ThemeProvider theme={appTheme}>
@@ -21,5 +20,6 @@ root.render(
         <App />
       </CurrentUserStateProvider>
     </ThemeProvider>
-  </>
+  </>,
+  entryPoint
 );
