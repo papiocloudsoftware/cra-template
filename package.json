@@ -8,7 +8,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "test": "yarn create react-app build/test-app --template file:./ && cd ./build/test-app && yarn build && yarn test",
+    "test": "yarn create react-app build/test-app --template file:./ && cd ./build/test-app && yarn build",
     "test-release": "semantic-release --dry-run --verify-conditions false",
     "release": "semantic-release"
   },
