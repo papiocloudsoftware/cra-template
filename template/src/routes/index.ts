@@ -18,7 +18,7 @@ export interface AppRoute {
 }
 
 export const RouteDetails: { [key: string]: AppRoute } = {
-  Home: {
+  LaunchPad: {
     Text: "Home",
     Route: routes.HomeRoute,
     Path: links.homePath,
@@ -26,28 +26,28 @@ export const RouteDetails: { [key: string]: AppRoute } = {
     Icon: icons.Home,
     Details: "Go to the home page"
   },
-  Route1: {
-    Text: "Route 1",
-    Route: routes.Route1,
-    Path: links.route1Path,
-    Link: links.Route1Link,
-    Icon: icons.BookmarksSharp,
-    Details: "Go to the 1st route"
+  Other: {
+    Text: "Other",
+    Route: routes.OtherRoute,
+    Path: links.otherPath,
+    Link: links.OtherLink,
+    Icon: icons.AccountTreeOutlined,
+    Details: "Some other main path"
   },
-  Route2: {
-    Text: "Route 2",
-    Route: routes.Route2,
-    Path: links.route2Path,
-    Link: links.Route2Link,
-    Icon: icons.BugReport,
-    Details: "Go to the 2nd route"
+  Settings: {
+    Text: "Settings",
+    Route: routes.SettingsRoute,
+    Path: links.settingsPath,
+    Link: links.SettingsLink,
+    Icon: icons.Settings,
+    Details: "Managed your settings"
   },
-  Route3: {
-    Text: "Route 3",
-    Route: routes.Route3,
-    Path: links.route3Path,
-    Link: links.Route3Link,
-    Icon: icons.Camera,
-    Details: "Go to the 3rd route"
+  Support: {
+    Text: "Support",
+    Route: routes.SupportRoute,
+    Path: links.supportPath,
+    Link: links.SupportLink,
+    Icon: icons.Help,
+    Details: "Get support"
   }
 };

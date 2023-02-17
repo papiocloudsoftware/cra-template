@@ -1,9 +1,10 @@
 import { KeyboardArrowLeft } from "@mui/icons-material";
 import { Toolbar } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
+import { DeviceType, useDeviceSettings } from "../../../hooks/use-device-settings";
 import { RouteDetails } from "../../../routes";
 import { ColorPalette } from "../../../style/color-palete";
 import { SquareLogo } from "../../logos";
@@ -13,20 +14,21 @@ import { UserManagement } from "./user-management";
 const useStyles = makeStyles({
   toolbar: {
     paddingLeft: "0px !important",
-    paddingRight: "0px !important"
+    paddingRight: "0px !important",
+    "& > div": {
+      display: "flex",
+      alignItems: "center",
+      height: "calc(100% - 8px)"
+    }
   },
   toolbarNavigationItems: {
-    display: "flex",
-    width: "100%",
-    height: "100%",
-    alignItems: "center"
+    width: "100%"
   },
   toolbarUserItems: {
-    display: "flex",
-    height: "100%",
     marginRight: 0,
     marginLeft: "auto"
   },
+  toolbarLogoItems: {},
   logo: {
     verticalAlign: "middle",
     height: "48px",
@@ -35,39 +37,47 @@ const useStyles = makeStyles({
   },
   route: {
     borderStyle: "solid !important",
-    borderBottomWidth: "0px",
-    borderBottomColor: ColorPalette.primaryColorLight,
-    borderTopWidth: "0px",
+    borderBottomWidth: "4px !important",
+    borderTopWidth: "4px !important",
     borderTopColor: `${ColorPalette.primaryColorLight}00 !important`,
-    height: "calc(100% - 12px) !important",
     alignItems: "center",
-    paddingTop: "4px",
-    paddingBottom: "4px",
-    transition: "border 0.5s, background-color 0.25s !important"
+    transition: "border 0.25s, background-color 0.25s !important"
+  },
+  inactiveRoute: {
+    borderBottomColor: `${ColorPalette.primaryColorLight}00 !important`
   },
   activeRoute: {
-    borderBottomWidth: "4px !important",
-    borderBottomColor: `${ColorPalette.primaryColorLight} !important`,
-    borderTopWidth: "4px !important"
+    borderBottomColor: `${ColorPalette.primaryColorLight} !important`
   },
   routeLink: {
     display: "flex",
-    height: "100%",
-    alignItems: "center"
+    alignItems: "center",
+    height: "calc(100% - 2px)"
   },
   menuIndicator: {
     fontSize: "20px",
     marginLeft: "-18px",
-    transition: "opacity 0.5s, transform 0.5s !important"
+    marginRight: "-6px",
+    transition: "opacity 0.5s, transform 0.5s !important",
+    color: ColorPalette.primaryColorLight
   }
 });
 
+interface NavigationItemsState {
+  readonly activeRouteKey?: string;
+}
+
 function NavigationItems() {
+  const [state, setState] = useState<NavigationItemsState>({});
   const location = useLocation();
   const styles = useStyles();
-  const activeRouteKey = Object.keys(RouteDetails)
-    .reverse()
-    .find((key) => location.pathname.startsWith(RouteDetails[key].Path));
+
+  useEffect(() => {
+    const activeRouteKey = Object.keys(RouteDetails)
+      .reverse()
+      .find((key) => location.pathname.startsWith(RouteDetails[key].Path));
+    setState((prevState) => ({ ...prevState, activeRouteKey: activeRouteKey || prevState.activeRouteKey }));
+  }, [location.pathname]);
 
   const spacing = " ".repeat(2);
   return (
@@ -75,19 +85,21 @@ function NavigationItems() {
       {Object.keys(RouteDetails).map((key) => {
         const routeDetail = RouteDetails[key];
         const classes = [styles.route];
-        if (key === activeRouteKey) {
+        if (key === state.activeRouteKey) {
           classes.push(styles.activeRoute);
+        } else {
+          classes.push(styles.inactiveRoute);
         }
         return (
-          <HeaderAction key={key} className={classes.join(" ")} description={routeDetail.Details}>
-            <routeDetail.Link className={styles.routeLink}>
+          <routeDetail.Link key={key} className={styles.routeLink}>
+            <HeaderAction className={classes.join(" ")} description={routeDetail.Details}>
               <span style={{ whiteSpace: "pre-wrap" }}>
                 {spacing}
                 {routeDetail.Text}
                 {spacing}
               </span>
-            </routeDetail.Link>
-          </HeaderAction>
+            </HeaderAction>
+          </routeDetail.Link>
         );
       })}
     </div>
@@ -102,21 +114,35 @@ export interface HeaderProps {
   readonly menuVisible: boolean;
 }
 
-export function Header(props: HeaderProps) {
+function MenuAction(props: HeaderProps) {
   const styles = useStyles();
   return (
-    <Toolbar className={styles.toolbar}>
+    <div className={styles.toolbarLogoItems}>
       <HeaderAction
         onClick={props.toggleMenu}
         description={props.menuVisible ? "Hide navigation menu" : "Show navigation menu"}
       >
-        <SquareLogo className={styles.logo} />
+        <SquareLogo mode="light" className={styles.logo} />
         <KeyboardArrowLeft
           className={styles.menuIndicator}
-          style={{ opacity: props.menuVisible ? 1.0 : 0.0, transform: `rotate(${props.menuVisible ? 0.0 : 180.0}deg)` }}
+          style={{
+            opacity: props.menuVisible ? 1.0 : 0.0,
+            transform: `rotate(${props.menuVisible ? 0.0 : 180.0}deg)`
+          }}
         />
       </HeaderAction>
-      <NavigationItems />
+    </div>
+  );
+}
+
+export function Header(props: HeaderProps) {
+  const styles = useStyles();
+  const deviceSettings = useDeviceSettings();
+
+  return (
+    <Toolbar className={styles.toolbar}>
+      <MenuAction {...props} />
+      {deviceSettings.deviceType >= DeviceType.TABLET ? <NavigationItems /> : undefined}
       <UserManagement className={styles.toolbarUserItems} />
     </Toolbar>
   );

@@ -64,7 +64,7 @@ async function verify<T extends TokenPayload>(jwt: string, excludeExp = false): 
   return payload as T;
 }
 
-function logout() {
+async function logout() {
   document.cookie = `${refreshTokenCookieName}=; domain=localhost; expires=${new Date(0)};`;
   return {};
 }

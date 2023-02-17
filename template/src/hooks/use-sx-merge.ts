@@ -43,13 +43,10 @@ function resolveSxProps<Theme extends object>(theme: Theme, sx?: SxProps<Theme>)
   return sx as NonNullSxProps<Theme>;
 }
 
-export function useSxMerge() {
-  return {
-    mergeSx
-  };
-}
-
-function mergeSx<Theme extends object>(theme: Theme, ...objects: (SxProps<Theme> | undefined)[]): SxProps<Theme> {
+export function useSxMerge<Theme extends object>(
+  theme: Theme,
+  ...objects: (SxProps<Theme> | undefined)[]
+): SxProps<Theme> {
   const resolved: NonNullSxProps<Theme>[] = objects.map((sx) => resolveSxProps(theme, sx));
   return deepMerge(...resolved);
 }

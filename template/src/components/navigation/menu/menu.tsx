@@ -1,9 +1,8 @@
-import { Toolbar } from "@mui/material";
+import { DrawerProps, Toolbar } from "@mui/material";
 import Drawer from "@mui/material/Drawer";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 
-import { ColorPalette } from "../../../style/color-palete";
 import { MenuItems } from "./menu-items";
 
 const useStyles = makeStyles({
@@ -17,28 +16,29 @@ const useStyles = makeStyles({
   }
 });
 
-interface MenuProps {
+interface MenuProps extends Pick<DrawerProps, "variant"> {
   readonly visible: boolean;
   readonly width: number;
+  readonly onClose?: () => void;
 }
 
 export function Menu(props: MenuProps) {
   const styles = useStyles();
+
   return (
     <Drawer
-      variant="persistent"
+      variant={props.variant}
+      onClose={props.onClose}
       className={styles.menu}
       open={props.visible}
       sx={{
         width: `${props.width}px`,
         zIndex: 1,
-        flexShrink: 0,
-        [`& .MuiDrawer-paper`]: { width: `${props.width}px`, boxSizing: "border-box", zIndex: 1 },
-        [`& .MuiListItemIcon-root`]: { minWidth: `36px`, color: ColorPalette.black }
+        [`& .MuiDrawer-paper`]: { width: `${props.width}px`, boxSizing: "border-box", zIndex: 1 }
       }}
     >
       <Toolbar />
-      <MenuItems />
+      <MenuItems onNavigate={props.variant === "temporary" ? props.onClose : undefined} />
     </Drawer>
   );
 }

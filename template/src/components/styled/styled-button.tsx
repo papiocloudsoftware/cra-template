@@ -84,7 +84,6 @@ interface StyledButtonState {
 export function StyledButton(props: StyledButtonProps) {
   const theme = useTheme();
   const [state, setState] = useState<StyledButtonState>({ clicked: false });
-  const sxMerge = useSxMerge();
   const { innerRef, children, showProgressOnClick, ...buttonProps } = props;
   const ref: RefObject<HTMLButtonElement> = innerRef || useRef<HTMLButtonElement>(null);
 
@@ -105,7 +104,7 @@ export function StyledButton(props: StyledButtonProps) {
   const modeProps: ModeProps = colorModeStyling[props.color || "primary"] || {};
   const mode = props.mode as Mode;
   // Merge styling from props
-  const sx = sxMerge.mergeSx(theme, modeProps[mode || "dark"], props.sx);
+  const sx = useSxMerge(theme, modeProps[mode || "dark"], props.sx);
 
   return (
     <Button

@@ -1,4 +1,4 @@
 export { HomeRoute } from "./home-route";
-export { Route1 } from "./route-1";
-export { Route2 } from "./route-2";
-export { Route3 } from "./route-3";
+export { OtherRoute } from "./other-route";
+export { SupportRoute } from "./support-route";
+export { SettingsRoute } from "./settings-route";

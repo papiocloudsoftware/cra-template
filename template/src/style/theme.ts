@@ -21,5 +21,6 @@ export const appTheme = createTheme({
     button: {
       textTransform: "none"
     }
-  }
+  },
+  components: {}
 });

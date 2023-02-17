@@ -1,50 +1,56 @@
-import { DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { CardProps, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import React, { useCallback } from "react";
 
 import { ColorPalette } from "../../style/color-palete";
 import { StyledButton } from "./styled-button";
-import { StyledOverlay } from "./styled-overlay";
 
 /**
  * Props to create StyledConfirmation
  */
-export interface StyledConfirmationProps {
-  readonly title: string;
-  readonly message: string;
+export interface StyledConfirmationProps extends Omit<CardProps, "title"> {
+  readonly title: string | JSX.Element;
+  readonly message: string | JSX.Element;
   readonly confirmText?: string;
   readonly onConfirm: () => void;
   readonly cancelText?: string;
-  readonly onCancel: () => void;
-  readonly visible: boolean;
-}
-
-async function sleep(ms: number): Promise<void> {
-  return new Promise((res) => setTimeout(res, ms));
+  readonly onCancel?: () => void;
 }
 
 export function StyledConfirmation(props: StyledConfirmationProps) {
-  const onConfirm = useCallback(async () => {
-    await sleep(1000);
+  const confirmCallback = useCallback(async () => {
     props.onConfirm();
   }, [props.onConfirm]);
+
   return (
-    <StyledOverlay visible={props.visible}>
-      <DialogTitle>{props.title}</DialogTitle>
-      <DialogContent>{props.message}</DialogContent>
-      <DialogActions>
+    <>
+      <DialogTitle sx={{ fontWeight: "600" }}>{props.title}</DialogTitle>
+      <DialogContent
+        sx={{
+          marginLeft: "1em",
+          color: ColorPalette.primaryColorDark,
+          textAlign: "justify",
+          lineHeight: "1.4em",
+          fontSize: "15px"
+        }}
+      >
+        {props.message}
+      </DialogContent>
+      <DialogActions sx={{ marginBottom: "8px", marginRight: "1em" }}>
         <StyledButton
           mode="light"
-          onClick={onConfirm}
+          onClick={confirmCallback}
           sx={{ width: "100px", ":hover": { borderColor: ColorPalette.primaryColorLight } }}
           autoFocus
           showProgressOnClick
         >
           {props.confirmText || "OK"}
         </StyledButton>
-        <StyledButton onClick={props.onCancel} sx={{ width: "100px" }}>
-          {props.cancelText || "Cancel"}
-        </StyledButton>
+        {props.onCancel ? (
+          <StyledButton onClick={props.onCancel} sx={{ width: "100px" }}>
+            {props.cancelText || "Cancel"}
+          </StyledButton>
+        ) : undefined}
       </DialogActions>
-    </StyledOverlay>
+    </>
   );
 }

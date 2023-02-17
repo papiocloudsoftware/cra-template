@@ -15,6 +15,7 @@ import { SignOutIcon } from "../../user/sign-out-icon";
 
 interface NavigationItemProps {
   readonly route: AppRoute;
+  readonly onClick?: () => void;
 }
 
 function NavigationItem(props: NavigationItemProps) {
@@ -23,7 +24,7 @@ function NavigationItem(props: NavigationItemProps) {
     <StyledTooltip title={route.Details} placement={"right"}>
       <div>
         <route.Link>
-          <ListItemButton>
+          <ListItemButton onClick={props.onClick}>
             <ListItemIcon style={{ margin: "auto" }}>
               <route.Icon />
             </ListItemIcon>
@@ -35,11 +36,16 @@ function NavigationItem(props: NavigationItemProps) {
   );
 }
 
-function SignedInItems(props: ListProps) {
+interface SignedInItemsProps extends ListProps {
+  readonly onNavigate?: () => void;
+}
+
+function SignedInItems(props: SignedInItemsProps) {
+  const { onNavigate, ...listProps } = props;
   return (
-    <List {...props}>
+    <List {...listProps}>
       <StyledTooltip title={"Done? Sign out to finish"} placement={"right"}>
-        <SignOutAction>
+        <SignOutAction onClose={onNavigate}>
           <ListItemButton>
             <ListItemIcon style={{ margin: "auto" }}>
               <SignInIcon />
@@ -52,11 +58,16 @@ function SignedInItems(props: ListProps) {
   );
 }
 
-function SignedOutItems(props: ListProps) {
+interface SignedOutItemsProps extends ListProps {
+  readonly onNavigate?: () => void;
+}
+
+function SignedOutItems(props: SignedOutItemsProps) {
+  const { onNavigate, ...listProps } = props;
   return (
-    <List {...props}>
+    <List {...listProps}>
       <StyledTooltip title={"Sign in to begin"} placement={"right"}>
-        <SignInAction>
+        <SignInAction onClose={onNavigate}>
           <ListItemButton>
             <ListItemIcon style={{ margin: "auto" }}>
               <SignOutIcon />
@@ -74,6 +85,7 @@ function SignedOutItems(props: ListProps) {
  */
 export interface MenuItemsProps {
   readonly routes?: AppRoute[];
+  readonly onNavigate?: () => void;
 }
 
 export function MenuItems(props: MenuItemsProps) {
@@ -86,11 +98,11 @@ export function MenuItems(props: MenuItemsProps) {
     <Box className={""} sx={{ margin: "-3px 0", overflow: "auto" }}>
       <List sx={{ padding: "0" }}>
         {menuRoutes.map((route, index) => (
-          <NavigationItem key={index} route={route} />
+          <NavigationItem key={index} route={route} onClick={props.onNavigate} />
         ))}
       </List>
       <Divider />
-      <UserList sx={{ padding: "0" }} />
+      <UserList sx={{ padding: "0" }} onNavigate={props.onNavigate} />
     </Box>
   );
 }

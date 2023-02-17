@@ -1,41 +1,32 @@
-import React, { forwardRef, HTMLAttributes, Ref, useCallback, useState } from "react";
+import React, { forwardRef, HTMLAttributes, Ref, useCallback } from "react";
 
-import { SignOutConfirmation } from "./sign-out-confirmation";
+import { useModals } from "../../hooks/use-modals";
 
 /**
  * Props to create SignOutAction
  */
-export interface SignOutActionProps extends HTMLAttributes<HTMLDivElement> {}
-
-interface SignOutActionState {
-  readonly signingOut: boolean;
+export interface SignOutActionProps extends HTMLAttributes<HTMLDivElement> {
+  readonly onClose?: () => void;
 }
 
 interface InternalActionProps {
+  readonly onClose?: () => void;
   readonly innerRef: Ref<HTMLDivElement>;
   readonly actionProps: SignOutActionProps;
 }
 
 function InternalAction(props: InternalActionProps) {
-  const [state, setState] = useState<SignOutActionState>({ signingOut: false });
+  const modal = useModals();
 
-  const closeConfirmation = useCallback(() => {
-    setState((prevState) => ({ ...prevState, signingOut: false }));
-  }, []);
-  const signOutCallback = useCallback(() => {
-    setState((prevState) => ({ ...prevState, signingOut: true }));
-  }, []);
+  const signOut = useCallback(() => {
+    modal.signOut(props.onClose);
+  }, [props.onClose]);
 
-  return (
-    <>
-      <div {...props.actionProps} onClick={signOutCallback} ref={props.innerRef} />
-      <SignOutConfirmation visible={state.signingOut} onClose={closeConfirmation} />
-    </>
-  );
+  return <div {...props.actionProps} onClick={signOut} ref={props.innerRef} />;
 }
 
 export const SignOutAction = forwardRef<HTMLDivElement, SignOutActionProps>((props, ref) => {
-  return <InternalAction innerRef={ref} actionProps={props} />;
+  return <InternalAction onClose={props.onClose} innerRef={ref} actionProps={props} />;
 });
 
 SignOutAction.displayName = "SignOutAction";

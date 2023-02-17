@@ -1,9 +1,12 @@
-import React, { forwardRef, HTMLAttributes, Ref, useCallback, useState } from "react";
+import React, { CSSProperties, forwardRef, HTMLAttributes, Ref, useCallback } from "react";
 
-import { SignInOverlay } from "./sign-in-overlay";
+import { useModals } from "../../hooks/use-modals";
 
 /** Props to create SignInAction */
-export interface SignInActionProps extends HTMLAttributes<HTMLDivElement> {}
+export interface SignInActionProps extends HTMLAttributes<HTMLDivElement> {
+  readonly onClose?: () => void;
+  readonly stack?: boolean;
+}
 
 interface InternalActionProps {
   readonly innerRef: Ref<HTMLDivElement>;
@@ -11,20 +14,17 @@ interface InternalActionProps {
 }
 
 function InternalAction(props: InternalActionProps) {
-  const [state, setState] = useState<SignInActionState>({ signingIn: false });
+  const modals = useModals();
 
-  const onClick = useCallback(() => setState((prevState) => ({ ...prevState, signingIn: true })), [setState]);
-  const onClose = useCallback(() => setState((prevState) => ({ ...prevState, signingIn: false })), [setState]);
-  return (
-    <>
-      <div {...props.actionProps} onClick={onClick} ref={props.innerRef} />
-      <SignInOverlay visible={state.signingIn} onClose={onClose} />
-    </>
-  );
-}
+  const { onClose, stack, ...divProps } = props.actionProps;
 
-interface SignInActionState {
-  readonly signingIn: boolean;
+  const onClick = useCallback(() => {
+    modals.signIn(onClose, stack);
+  }, [modals.signIn, onClose]);
+
+  const style: CSSProperties = { display: "inline", ...(divProps.style || {}) };
+
+  return <div {...divProps} style={style} onClick={onClick} ref={props.innerRef} />;
 }
 
 export const SignInAction = forwardRef<HTMLDivElement, SignInActionProps>((props, ref) => {

@@ -13,7 +13,7 @@ const useStyles = makeStyles({
     transition: "background-color 0.25s",
     minWidth: "0 !important",
     "&:hover": {
-      backgroundColor: "#ffffff22 !important"
+      backgroundColor: "#0000000a !important"
     },
     whiteSpace: "nowrap"
   }
@@ -29,7 +29,7 @@ export function HeaderAction(props: PropsWithChildren<HeaderActionProps>) {
   const classes = useClasses(props, styles.action);
   return (
     <StyledTooltip title={props.description}>
-      <Button size={"large"} {...props} className={classes} color={"inherit"}>
+      <Button size={"large"} {...props} className={classes} color={"inherit"} sx={{ borderRadius: 0 }}>
         {props.children}
       </Button>
     </StyledTooltip>

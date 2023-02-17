@@ -1,4 +1,4 @@
 export { HomeLink, homePath } from "../../../routes/home-route";
-export { Route1Link, route1Path } from "../../../routes/route-1";
-export { Route2Link, route2Path } from "../../../routes/route-2";
-export { Route3Link, route3Path } from "../../../routes/route-3";
+export { OtherLink, otherPath } from "../../../routes/other-route";
+export { SettingsLink, settingsPath } from "../../../routes/settings-route";
+export { SupportLink, supportPath } from "../../../routes/support-route";

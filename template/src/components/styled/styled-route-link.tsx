@@ -14,7 +14,7 @@ export const useStyles = makeStyles({
   }
 });
 
-export function StyledLink(props: LinkProps) {
+export function StyledRouteLink(props: LinkProps) {
   const styles = useStyles();
   const className = useClasses(props, styles.link);
   return <Link {...props} className={className} />;

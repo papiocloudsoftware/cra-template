@@ -4,17 +4,18 @@ import { makeStyles } from "@mui/styles";
 import React, { HTMLAttributes, useCallback, useState } from "react";
 
 import { useCurrentUser } from "../../../hooks/use-current-user";
+import { useModals } from "../../../hooks/use-modals";
 import { CurrentUser } from "../../../service/user-types";
 import { SignInAction } from "../../user/sign-in-action";
 import { SignInIcon } from "../../user/sign-in-icon";
-import { SignOutConfirmation } from "../../user/sign-out-confirmation";
 import { SignOutIcon } from "../../user/sign-out-icon";
 import { UserIcon } from "../../user/user-icon";
 import { HeaderAction } from "./header-action";
 
 const useStyles = makeStyles({
   action: {
-    paddingRight: "16px"
+    paddingRight: "16px",
+    height: "100%"
   },
   menu: {
     marginTop: "-6px"
@@ -26,42 +27,34 @@ function userDetailsText(currentUser: CurrentUser): string {
   return `${contactInfo.firstName} ${contactInfo.lastName}`;
 }
 
-interface UserMenuState {
-  readonly signingOut: boolean;
-}
-
 function UserMenu(props: MenuProps) {
-  const [state, setState] = useState<UserMenuState>({ signingOut: false });
   const styles = useStyles();
+  const modals = useModals();
 
-  const openSignOut = useCallback(() => setState((prevState) => ({ ...prevState, signingOut: true })), []);
-  const closeSignOut = useCallback(() => setState((prevState) => ({ ...prevState, signingOut: false })), []);
+  const signOut = useCallback(() => modals.signOut(), [modals.signOut]);
 
   return (
-    <>
-      <SignOutConfirmation onClose={closeSignOut} visible={state.signingOut} />
-      <Menu {...props} PopoverClasses={{ paper: styles.menu }}>
-        <MenuItem>
-          <ListItemIcon>
-            <UserIcon />
-          </ListItemIcon>
-          <ListItemText>Account</ListItemText>
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <Help />
-          </ListItemIcon>
-          <ListItemText>Support</ListItemText>
-        </MenuItem>
-        <Divider />
-        <MenuItem onClick={openSignOut}>
-          <ListItemIcon>
-            <SignOutIcon />
-          </ListItemIcon>
-          <ListItemText>Sign Out</ListItemText>
-        </MenuItem>
-      </Menu>
-    </>
+    <Menu {...props} PopoverClasses={{ paper: styles.menu }}>
+      <MenuItem>
+        <ListItemIcon>
+          <UserIcon />
+        </ListItemIcon>
+        <ListItemText>Account</ListItemText>
+      </MenuItem>
+      <MenuItem>
+        <ListItemIcon>
+          <Help />
+        </ListItemIcon>
+        <ListItemText>Support</ListItemText>
+      </MenuItem>
+      <Divider />
+      <MenuItem onClick={signOut}>
+        <ListItemIcon>
+          <SignOutIcon />
+        </ListItemIcon>
+        <ListItemText>Sign Out</ListItemText>
+      </MenuItem>
+    </Menu>
   );
 }
 
@@ -77,19 +70,19 @@ export function UserManagement(props: UserManagementProps) {
   const styles = useStyles();
   const currentUser = useCurrentUser();
 
-  const openMenu = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) =>
-      setState((prevState) => ({ ...prevState, menuAnchorElement: event.currentTarget })),
-    []
-  );
-  const closeMenu = useCallback(() => setState((prevState) => ({ ...prevState, menuAnchorElement: null })), []);
-
-  console.log(state.menuAnchorElement?.className);
+  const openMenu = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+    console.log("Opening user menu!");
+    setState((prevState) => ({ ...prevState, menuAnchorElement: event.currentTarget }));
+  }, []);
+  const closeMenu = useCallback(() => {
+    console.log("Closing user menu!");
+    setState((prevState) => ({ ...prevState, menuAnchorElement: null }));
+  }, []);
 
   if (!currentUser) {
     return (
       <div {...props}>
-        <SignInAction>
+        <SignInAction style={{ height: "100%" }}>
           <HeaderAction description={"Sign in to begin"} className={styles.action}>
             <SignInIcon style={{ marginRight: "12px" }} />
             Sign In
@@ -105,7 +98,12 @@ export function UserManagement(props: UserManagementProps) {
           {userDetails}
           <UserIcon style={{ marginLeft: "12px" }} />
         </HeaderAction>
-        <UserMenu anchorEl={state.menuAnchorElement} open={state.menuAnchorElement !== null} onClose={closeMenu} />
+        <UserMenu
+          anchorEl={state.menuAnchorElement}
+          open={state.menuAnchorElement !== null}
+          onClose={closeMenu}
+          onBlur={closeMenu}
+        />
       </div>
     );
   }

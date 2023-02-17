@@ -15,9 +15,9 @@ import Color from "color";
 import React, { ChangeEvent, useCallback, useRef, useState } from "react";
 
 import { useCurrentUserState } from "../../hooks/use-current-user-state";
+import { useKeyPressHandler } from "../../hooks/use-key-press-handler";
 import { UserService } from "../../service/user-service";
 import { ColorPalette } from "../../style/color-palete";
-import { KeyPressAction } from "../actions/key-press-action";
 import { SquareLogo } from "../logos";
 import { StyledButton } from "../styled/styled-button";
 
@@ -26,7 +26,7 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    width: "600px",
+    width: "min(600px, 90vw)",
     padding: "50px",
     background: `radial-gradient(circle at 50% 25%, ${new Color(ColorPalette.primaryColorDark)
       .lighten(1.5)
@@ -34,7 +34,7 @@ const useStyles = makeStyles({
   },
   logo: {
     width: "128px",
-    marginTop: "32px",
+    marginTop: "24px",
     marginBottom: "64px"
   },
   input: {
@@ -51,25 +51,26 @@ const useStyles = makeStyles({
   },
   options: {
     display: "flex",
-    width: "100%",
+    width: "300px",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-between",
     color: ColorPalette.white,
     "& *": {
       fontSize: "0.9rem !important"
     },
-    "& > span": {
-      margin: "0.5rem"
-    },
-    marginBottom: "0.5rem"
+    marginBottom: "0.5rem",
+    "& > label": {
+      marginRight: "0 !important",
+      marginLeft: "0 !important"
+    }
   },
   buttons: {
     display: "flex",
-    width: "50%",
+    width: "250px",
     alignItems: "center",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
     marginTop: "48px",
-    marginBottom: "64px",
+    marginBottom: "32px",
     "& button": {
       width: "100px"
     }
@@ -244,14 +245,16 @@ export function SignInDialog(props: SignInDialogProps) {
     ((state.password && !state.passwordValidation) || state.forgotPassword) &&
     !state.loggingIn;
 
+  const onKeyUp = useKeyPressHandler({ Enter: autoSubmitCheck });
+
   return (
-    <KeyPressAction className={styles.dialog} actions={{ Enter: autoSubmitCheck }}>
+    <div className={styles.dialog} onKeyUp={onKeyUp}>
       <Fade className={styles.alert} in={state.showAlert} timeout={250}>
         <Alert onClose={ackAlert} severity={state.alertSeverity}>
           {state.alertMessage}
         </Alert>
       </Fade>
-      <SquareLogo mode={"light"} className={styles.logo} />
+      <SquareLogo mode="light" className={styles.logo} />
       <div className={styles.input}>
         <FieldInput
           type="email"
@@ -299,6 +302,6 @@ export function SignInDialog(props: SignInDialogProps) {
           Cancel
         </StyledButton>
       </div>
-    </KeyPressAction>
+    </div>
   );
 }

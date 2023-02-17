@@ -4,12 +4,12 @@ import { createRoot } from "react-dom/client";
 
 import App from "./App";
 import { CurrentUserStateProvider } from "./hooks/use-current-user-state";
+import { DeviceSettingsProvider } from "./hooks/use-device-settings";
+import { ModalStateProvider } from "./hooks/use-modal-state";
 import { appTheme } from "./style/theme";
 
-if (process.env.NODE_ENV === "development") {
-  const mockServer = require("./service/mock-server").mockServer;
-  mockServer();
-}
+const mockServer = require("./service/mock-server").mockServer;
+mockServer();
 
 const entryPoint = document.getElementById("root");
 const root = createRoot(entryPoint!);
@@ -17,9 +17,13 @@ root.render(
   <>
     <CssBaseline />
     <ThemeProvider theme={appTheme}>
-      <CurrentUserStateProvider>
-        <App />
-      </CurrentUserStateProvider>
+      <DeviceSettingsProvider>
+        <CurrentUserStateProvider>
+          <ModalStateProvider>
+            <App />
+          </ModalStateProvider>
+        </CurrentUserStateProvider>
+      </DeviceSettingsProvider>
     </ThemeProvider>
   </>
 );
