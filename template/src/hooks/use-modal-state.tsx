@@ -8,7 +8,6 @@ export type ShowModalFunction = (modalData: ModalData, stack?: boolean) => void;
  * Modal data, includes props for overlay and element to render
  */
 export interface ModalData {
-  readonly id: string;
   readonly props?: Omit<StyledOverlayProps, "visible">;
   readonly element: JSX.Element;
 }
@@ -19,7 +18,7 @@ export interface ModalData {
 export interface ModalState {
   readonly modalStack: ModalData[];
   readonly showModal: ShowModalFunction;
-  readonly hideModal: (id: string) => void;
+  readonly hideModal: () => void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -46,7 +45,7 @@ export function ModalStateProvider(props: PropsWithChildren<unknown>) {
   });
   const showModal = useCallback((modalData: ModalData, stack?: boolean) => {
     setState((prevState) => {
-      const newStack = prevState.modalStack.filter((e) => e.id !== modalData.id);
+      const newStack = prevState.modalStack;
       if (stack === true || newStack.length === 0) {
         newStack.push(modalData);
       } else {
@@ -58,13 +57,15 @@ export function ModalStateProvider(props: PropsWithChildren<unknown>) {
       };
     });
   }, []);
-  const hideModal = useCallback((id: string) => {
+  const hideModal = useCallback(() => {
     setState((prevState) => {
-      const newStack = prevState.modalStack.filter((e) => e.id !== id);
-      return {
-        ...prevState,
-        modalStack: newStack
-      };
+      if (prevState.modalStack.length > 0) {
+        return {
+          ...prevState,
+          modalStack: prevState.modalStack.slice(0, prevState.modalStack.length - 1)
+        };
+      }
+      return prevState;
     });
   }, []);
 

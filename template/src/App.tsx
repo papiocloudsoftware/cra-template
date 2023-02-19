@@ -58,8 +58,6 @@ interface AppState {
   readonly menuVisible: boolean;
 }
 
-const appLoaderModalId = "app-loader";
-
 /**
  *
  */
@@ -78,7 +76,6 @@ function App() {
 
   useEffect(() => {
     modalState.showModal({
-      id: appLoaderModalId,
       props: {
         sx: { backgroundColor: "#00000000", boxShadow: "none" }
       },
@@ -102,7 +99,7 @@ function App() {
         currentUserState.setCurrentUser(undefined);
       }
       setTimeout(() => {
-        modalState.hideModal(appLoaderModalId);
+        modalState.hideModal();
       }, 1000);
     });
   }, []);

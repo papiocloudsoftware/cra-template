@@ -37,53 +37,47 @@ function showConfirmation(modalState: ModalState, theme: Theme, modalData: Modal
 }
 
 interface SignInModalProps {
-  readonly modalId: string;
   readonly onClose?: () => void;
 }
 
 function SignInModal(props: SignInModalProps) {
   const modalState = useModalState();
   const closeConfirmation = useCallback(() => {
-    modalState.hideModal(props.modalId);
+    modalState.hideModal();
     if (props.onClose) {
       props.onClose();
     }
-  }, [modalState.hideModal, props.onClose, props.modalId]);
+  }, [modalState.hideModal, props.onClose]);
   return <SignInDialog onClose={closeConfirmation} />;
 }
 
 function signIn(modalState: ModalState, onClose?: () => void, stack?: boolean) {
-  const modalId = "sign-in-confirmation";
   modalState.showModal(
     {
-      id: modalId,
-      element: <SignInModal modalId={modalId} onClose={onClose} />
+      element: <SignInModal onClose={onClose} />
     },
     stack
   );
 }
 
 interface SignOutModalProps {
-  readonly modalId: string;
   readonly onClose?: () => void;
 }
 
 function SignOutModal(props: SignOutModalProps) {
   const modalState = useModalState();
   const closeConfirmation = useCallback(() => {
-    modalState.hideModal(props.modalId);
+    modalState.hideModal();
     if (props.onClose) {
       props.onClose();
     }
-  }, [modalState.hideModal, props.onClose, props.modalId]);
+  }, [modalState.hideModal, props.onClose]);
   return <SignOutConfirmation onClose={closeConfirmation} />;
 }
 
 function signOut(modalState: ModalState, theme: Theme, onClose?: () => void) {
-  const modalId = "sign-out-confirmation";
   showConfirmation(modalState, theme, {
-    id: modalId,
-    element: <SignOutModal modalId={modalId} onClose={onClose} />
+    element: <SignOutModal onClose={onClose} />
   });
 }
 
