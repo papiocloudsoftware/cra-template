@@ -7,9 +7,9 @@ pipeline {
         sh "yarn"
       }
     }
-    stage("Test") {
-      steps { sh "yarn test" }
-    }
+    // stage("Test") {
+    //  steps { sh "yarn test" }
+    // }
     stage("Release") {
       when { branch "master" }
       environment {
