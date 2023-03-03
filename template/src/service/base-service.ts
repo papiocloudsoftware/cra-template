@@ -1,23 +1,29 @@
-import { CurrentUserState } from "../hooks/use-current-user-state";
-import { AuthTokens } from "./user-types";
+import { AuthTokens } from './user-types';
 
 export abstract class BaseService {
-  static readonly AUTHORIZATION_KEY = "authorization";
-  static readonly API_BASE_PATH = "/api";
-  readonly currentUserState: CurrentUserState;
+  static readonly AUTHORIZATION_KEY = 'authorization';
+  static readonly API_BASE_PATH = '/api';
 
-  protected constructor(currentUserState: CurrentUserState) {
-    this.currentUserState = currentUserState;
-  }
-
-  protected async fetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+  protected async fetch(
+    input: RequestInfo | URL,
+    init?: RequestInit
+  ): Promise<Response> {
     const requestProps = init || {};
-    const mergedHeaders: HeadersInit = { ...this.commonHeaders(), ...(requestProps.headers || {}) };
-    const response = await fetch(input, { ...requestProps, headers: mergedHeaders });
-    if (response.status === 401 && "Authorization" in mergedHeaders) {
+    const mergedHeaders: HeadersInit = {
+      ...this.commonHeaders(),
+      ...(requestProps.headers || {}),
+    };
+    const response = await fetch(input, {
+      ...requestProps,
+      headers: mergedHeaders,
+    });
+    if (response.status === 401 && 'Authorization' in mergedHeaders) {
       await this.refreshToken();
       // Try again after refresh
-      const newMergedHeaders: HeadersInit = { ...this.commonHeaders(), ...(requestProps.headers || {}) };
+      const newMergedHeaders: HeadersInit = {
+        ...this.commonHeaders(),
+        ...(requestProps.headers || {}),
+      };
       return fetch(input, { ...requestProps, headers: newMergedHeaders });
     } else {
       return response;
@@ -26,8 +32,8 @@ export abstract class BaseService {
 
   protected commonHeaders(): { [key: string]: string } {
     const headers: HeadersInit = {
-      Accept: "applicaiton/json",
-      ["Content-Type"]: "application/json"
+      Accept: 'applicaiton/json',
+      'Content-Type': 'application/json',
     };
 
     const authTokensJson = localStorage.getItem(BaseService.AUTHORIZATION_KEY);
@@ -42,8 +48,8 @@ export abstract class BaseService {
 
   protected async refreshToken(): Promise<void> {
     const response = await fetch(`${BaseService.API_BASE_PATH}/refresh-token`, {
-      method: "POST",
-      headers: this.commonHeaders()
+      method: 'POST',
+      headers: this.commonHeaders(),
     });
     if (response.ok) {
       await this.storeAuthTokens(response);
@@ -53,7 +59,10 @@ export abstract class BaseService {
   protected async storeAuthTokens(response: Response) {
     const authTokens = (await response.json()) as AuthTokens;
     if (authTokens.access_token) {
-      localStorage.setItem(BaseService.AUTHORIZATION_KEY, JSON.stringify(authTokens));
+      localStorage.setItem(
+        BaseService.AUTHORIZATION_KEY,
+        JSON.stringify(authTokens)
+      );
     }
   }
 }

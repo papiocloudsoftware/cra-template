@@ -1,6 +1,6 @@
-import { JWTPayload } from "jose";
+import { JWTPayload } from 'jose';
 
-import { ApplicationSettings } from "./application-types";
+import { ApplicationSettings } from './application-types';
 
 /**
  * Information needed to contact a user
@@ -24,28 +24,28 @@ export interface User {
  * Base payload stored in all tokens
  */
 export interface TokenPayload extends JWTPayload, User {
-  readonly type: "access" | "id" | "refresh";
+  readonly type: 'access' | 'id' | 'refresh';
 }
 
 /**
  * Payload data stored in the access token
  */
 export interface AccessTokenPayload extends TokenPayload {
-  readonly type: "access";
+  readonly type: 'access';
 }
 
 /**
  * Payload data stored in the id token
  */
 export interface IdTokenPayload extends TokenPayload {
-  readonly type: "id";
+  readonly type: 'id';
 }
 
 /**
  * Payload data stored in the refresh token
  */
 export interface RefreshTokenPayload extends TokenPayload {
-  readonly type: "refresh";
+  readonly type: 'refresh';
 }
 
 /**

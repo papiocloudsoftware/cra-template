@@ -1,9 +1,9 @@
-import { SxProps } from "@mui/system";
+import { SxProps } from '@mui/system';
 import {
   CSSPseudoSelectorProps,
   CSSSelectorObjectOrCssVariables,
-  SystemCssProperties
-} from "@mui/system/styleFunctionSx/styleFunctionSx";
+  SystemCssProperties,
+} from '@mui/system/styleFunctionSx/styleFunctionSx';
 
 type NonNullSxProps<Theme extends object> =
   | SystemCssProperties<Theme>
@@ -17,7 +17,7 @@ function deepMerge<T extends object>(...objects: T[]): T {
     for (const k of Object.keys(object)) {
       const key = k as keyof T;
       // If object[key] is an object we may need to deep merge
-      if (typeof object[key] === "object") {
+      if (typeof object[key] === 'object') {
         // eslint-disable-next-line max-depth
         if (result[key] === undefined || result[key] === null) {
           result[key] = object[key];
@@ -33,11 +33,14 @@ function deepMerge<T extends object>(...objects: T[]): T {
   return result as T;
 }
 
-function resolveSxProps<Theme extends object>(theme: Theme, sx?: SxProps<Theme>): NonNullSxProps<Theme> {
+function resolveSxProps<Theme extends object>(
+  theme: Theme,
+  sx?: SxProps<Theme>
+): NonNullSxProps<Theme> {
   if (!sx) {
     return {};
   }
-  if (typeof sx === "function") {
+  if (typeof sx === 'function') {
     return sx(theme) as NonNullSxProps<Theme>;
   }
   return sx as NonNullSxProps<Theme>;
@@ -47,6 +50,8 @@ export function useSxMerge<Theme extends object>(
   theme: Theme,
   ...objects: (SxProps<Theme> | undefined)[]
 ): SxProps<Theme> {
-  const resolved: NonNullSxProps<Theme>[] = objects.map((sx) => resolveSxProps(theme, sx));
+  const resolved: NonNullSxProps<Theme>[] = objects.map((sx) =>
+    resolveSxProps(theme, sx)
+  );
   return deepMerge(...resolved);
 }

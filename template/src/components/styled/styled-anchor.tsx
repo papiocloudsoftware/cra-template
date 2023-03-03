@@ -1,5 +1,5 @@
-import React, { AnchorHTMLAttributes } from "react";
+import React, { AnchorHTMLAttributes } from 'react';
 
 export function StyledAnchor(props: AnchorHTMLAttributes<HTMLAnchorElement>) {
-  return <a href={""} {...props} />;
+  return <a href="" {...props} />;
 }

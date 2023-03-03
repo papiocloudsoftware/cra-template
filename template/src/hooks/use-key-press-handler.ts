@@ -1,4 +1,4 @@
-import { KeyboardEvent, KeyboardEventHandler, useCallback } from "react";
+import { KeyboardEvent, KeyboardEventHandler, useCallback } from 'react';
 
 export function useKeyPressHandler<T extends HTMLElement>(
   actions: { [key: string]: () => void },

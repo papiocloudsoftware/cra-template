@@ -1,9 +1,12 @@
-import React, { useCallback, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useCallback, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { Home } from "../components/home";
-import { PublicRouteLinkProps, RouteLink } from "../components/navigation/links/route-link";
-import { useModals } from "../hooks/use-modals";
+import { Home } from '../components/home';
+import {
+  PublicRouteLinkProps,
+  RouteLink,
+} from '../components/navigation/links/route-link';
+import { useModals } from '../hooks/use-modals';
 
 export function SignInRoute() {
   const modals = useModals();
@@ -23,7 +26,7 @@ export function SignInRoute() {
   );
 }
 
-export const signInPath = "/sign-in";
+export const signInPath = '/sign-in';
 
 export function SignInLink(props: PublicRouteLinkProps) {
   return <RouteLink {...props} path={signInPath} />;

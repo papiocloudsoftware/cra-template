@@ -1,10 +1,15 @@
-import React, { PropsWithChildren, useContext, useEffect, useState } from "react";
+import React, {
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 export enum DeviceType {
   MOBILE = 0,
   TABLET = 1,
   LAPTOP = 2,
-  DESKTOP = 3
+  DESKTOP = 3,
 }
 
 /**
@@ -15,7 +20,9 @@ export interface DeviceSettings {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-const DeviceSettingsContext = React.createContext<DeviceSettings>({ deviceType: DeviceType.DESKTOP });
+const DeviceSettingsContext = React.createContext<DeviceSettings>({
+  deviceType: DeviceType.DESKTOP,
+});
 
 export function useDeviceSettings(): DeviceSettings {
   return useContext(DeviceSettingsContext);
@@ -33,17 +40,26 @@ function computeDeviceType(): DeviceType {
 }
 
 export function DeviceSettingsProvider(props: PropsWithChildren<unknown>) {
-  const [deviceSettings, setDeviceSettings] = useState<DeviceSettings>({ deviceType: computeDeviceType() });
+  const [deviceSettings, setDeviceSettings] = useState<DeviceSettings>({
+    deviceType: computeDeviceType(),
+  });
 
   useEffect(() => {
     const listener = () => {
-      setDeviceSettings((prevSettings) => ({ ...prevSettings, deviceType: computeDeviceType() }));
+      setDeviceSettings((prevSettings) => ({
+        ...prevSettings,
+        deviceType: computeDeviceType(),
+      }));
     };
-    window.addEventListener("resize", listener);
+    window.addEventListener('resize', listener);
     return () => {
-      window.removeEventListener("resize", listener);
+      window.removeEventListener('resize', listener);
     };
   }, []);
 
-  return <DeviceSettingsContext.Provider value={deviceSettings}>{props.children}</DeviceSettingsContext.Provider>;
+  return (
+    <DeviceSettingsContext.Provider value={deviceSettings}>
+      {props.children}
+    </DeviceSettingsContext.Provider>
+  );
 }

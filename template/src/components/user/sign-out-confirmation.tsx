@@ -1,14 +1,20 @@
-import React, { useCallback } from "react";
+import React, { useCallback } from 'react';
 
-import { useCurrentUserState } from "../../hooks/use-current-user-state";
-import { UserService } from "../../service/user-service";
-import { StyledConfirmation, StyledConfirmationProps } from "../styled/styled-confirmation";
+import { useCurrentUserState } from '../../hooks/use-current-user-state';
+import { UserService } from '../../service/user-service';
+import {
+  StyledConfirmation,
+  StyledConfirmationProps,
+} from '../styled/styled-confirmation';
 
 /**
  * Props to create SignOutConfirmation
  */
 export interface SignOutConfirmationProps
-  extends Omit<StyledConfirmationProps, "title" | "message" | "confirmText" | "onConfirm" | "onCancel"> {
+  extends Omit<
+    StyledConfirmationProps,
+    'title' | 'message' | 'confirmText' | 'onConfirm' | 'onCancel'
+  > {
   readonly onClose: () => void;
 }
 

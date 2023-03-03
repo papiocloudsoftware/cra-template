@@ -1,17 +1,17 @@
-import { List, ListItemButton, ListProps } from "@mui/material";
-import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import React from "react";
+import { List, ListItemButton, ListProps } from '@mui/material';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import React from 'react';
 
-import { useCurrentUser } from "../../../hooks/use-current-user";
-import { AppRoute, RouteDetails } from "../../../routes";
-import { StyledTooltip } from "../../styled/styled-tooltip";
-import { SignInAction } from "../../user/sign-in-action";
-import { SignInIcon } from "../../user/sign-in-icon";
-import { SignOutAction } from "../../user/sign-out-action";
-import { SignOutIcon } from "../../user/sign-out-icon";
+import { useCurrentUser } from '../../../hooks/use-current-user';
+import { AppRoute, RouteDetails } from '../../../routes';
+import { StyledTooltip } from '../../styled/styled-tooltip';
+import { SignInAction } from '../../user/sign-in-action';
+import { SignInIcon } from '../../user/sign-in-icon';
+import { SignOutAction } from '../../user/sign-out-action';
+import { SignOutIcon } from '../../user/sign-out-icon';
 
 interface NavigationItemProps {
   readonly route: AppRoute;
@@ -21,11 +21,11 @@ interface NavigationItemProps {
 function NavigationItem(props: NavigationItemProps) {
   const route = props.route;
   return (
-    <StyledTooltip title={route.Details} placement={"right"}>
+    <StyledTooltip title={route.Details} placement={'right'}>
       <div>
         <route.Link>
           <ListItemButton onClick={props.onClick}>
-            <ListItemIcon style={{ margin: "auto" }}>
+            <ListItemIcon style={{ margin: 'auto' }}>
               <route.Icon />
             </ListItemIcon>
             <ListItemText primary={route.Text} />
@@ -44,13 +44,13 @@ function SignedInItems(props: SignedInItemsProps) {
   const { onNavigate, ...listProps } = props;
   return (
     <List {...listProps}>
-      <StyledTooltip title={"Done? Sign out to finish"} placement={"right"}>
+      <StyledTooltip title={'Done? Sign out to finish'} placement={'right'}>
         <SignOutAction onClose={onNavigate}>
           <ListItemButton>
-            <ListItemIcon style={{ margin: "auto" }}>
+            <ListItemIcon style={{ margin: 'auto' }}>
               <SignInIcon />
             </ListItemIcon>
-            <ListItemText primary={"Sign Out"} />
+            <ListItemText primary="Sign Out" />
           </ListItemButton>
         </SignOutAction>
       </StyledTooltip>
@@ -66,13 +66,13 @@ function SignedOutItems(props: SignedOutItemsProps) {
   const { onNavigate, ...listProps } = props;
   return (
     <List {...listProps}>
-      <StyledTooltip title={"Sign in to begin"} placement={"right"}>
+      <StyledTooltip title="Sign in to begin" placement="right">
         <SignInAction onClose={onNavigate}>
           <ListItemButton>
-            <ListItemIcon style={{ margin: "auto" }}>
+            <ListItemIcon style={{ margin: 'auto' }}>
               <SignOutIcon />
             </ListItemIcon>
-            <ListItemText primary={"Sign In"} />
+            <ListItemText primary="Sign In" />
           </ListItemButton>
         </SignInAction>
       </StyledTooltip>
@@ -95,14 +95,18 @@ export function MenuItems(props: MenuItemsProps) {
   const UserList = currentUser ? SignedInItems : SignedOutItems;
 
   return (
-    <Box className={""} sx={{ margin: "-3px 0", overflow: "auto" }}>
-      <List sx={{ padding: "0" }}>
+    <Box className={''} sx={{ margin: '-3px 0', overflow: 'auto' }}>
+      <List sx={{ padding: '0' }}>
         {menuRoutes.map((route, index) => (
-          <NavigationItem key={index} route={route} onClick={props.onNavigate} />
+          <NavigationItem
+            key={index}
+            route={route}
+            onClick={props.onNavigate}
+          />
         ))}
       </List>
       <Divider />
-      <UserList sx={{ padding: "0" }} onNavigate={props.onNavigate} />
+      <UserList sx={{ padding: '0' }} onNavigate={props.onNavigate} />
     </Box>
   );
 }

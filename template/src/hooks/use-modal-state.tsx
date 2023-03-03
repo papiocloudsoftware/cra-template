@@ -1,6 +1,11 @@
-import React, { PropsWithChildren, useCallback, useContext, useState } from "react";
+import React, {
+  PropsWithChildren,
+  useCallback,
+  useContext,
+  useState,
+} from 'react';
 
-import { StyledOverlayProps } from "../components/styled/styled-overlay";
+import { StyledOverlayProps } from '../components/styled/styled-overlay';
 
 export type ShowModalFunction = (modalData: ModalData, stack?: boolean) => void;
 
@@ -8,7 +13,7 @@ export type ShowModalFunction = (modalData: ModalData, stack?: boolean) => void;
  * Modal data, includes props for overlay and element to render
  */
 export interface ModalData {
-  readonly props?: Omit<StyledOverlayProps, "visible">;
+  readonly props?: Omit<StyledOverlayProps, 'visible'>;
   readonly element: JSX.Element;
 }
 
@@ -23,13 +28,13 @@ export interface ModalState {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const emptyFunction = () => {
-  console.log("Empty function!");
+  console.log('Empty function!');
 };
 
 const ModalContext = React.createContext<ModalState>({
   modalStack: [],
   showModal: emptyFunction,
-  hideModal: emptyFunction
+  hideModal: emptyFunction,
 });
 
 export function useModalState(): ModalState {
@@ -41,7 +46,7 @@ export function ModalStateProvider(props: PropsWithChildren<unknown>) {
   const [state, setState] = useState<ModalState>({
     modalStack: [],
     showModal: emptyFunction,
-    hideModal: emptyFunction
+    hideModal: emptyFunction,
   });
   const showModal = useCallback((modalData: ModalData, stack?: boolean) => {
     setState((prevState) => {
@@ -53,7 +58,7 @@ export function ModalStateProvider(props: PropsWithChildren<unknown>) {
       }
       return {
         ...prevState,
-        modalStack: newStack
+        modalStack: newStack,
       };
     });
   }, []);
@@ -62,7 +67,10 @@ export function ModalStateProvider(props: PropsWithChildren<unknown>) {
       if (prevState.modalStack.length > 0) {
         return {
           ...prevState,
-          modalStack: prevState.modalStack.slice(0, prevState.modalStack.length - 1)
+          modalStack: prevState.modalStack.slice(
+            0,
+            prevState.modalStack.length - 1
+          ),
         };
       }
       return prevState;
@@ -73,5 +81,9 @@ export function ModalStateProvider(props: PropsWithChildren<unknown>) {
     setState((prevState) => ({ ...prevState, showModal, hideModal }));
   }
 
-  return <ModalContext.Provider value={state}>{props.children}</ModalContext.Provider>;
+  return (
+    <ModalContext.Provider value={state}>
+      {props.children}
+    </ModalContext.Provider>
+  );
 }

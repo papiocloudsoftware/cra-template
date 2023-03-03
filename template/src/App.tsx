@@ -1,35 +1,35 @@
-import "./style/app.css";
+import './style/app.css';
 
-import { AppBar, CircularProgress, Paper } from "@mui/material";
-import { makeStyles } from "@mui/styles";
-import React, { CSSProperties, useCallback, useEffect, useState } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { AppBar, CircularProgress, Paper } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import React, { CSSProperties, useCallback, useEffect, useState } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import { Header } from "./components/navigation/header";
-import { Menu } from "./components/navigation/menu";
-import { StyledOverlay } from "./components/styled/styled-overlay";
-import { useCurrentUserState } from "./hooks/use-current-user-state";
-import { DeviceType, useDeviceSettings } from "./hooks/use-device-settings";
-import { useModalState } from "./hooks/use-modal-state";
-import { RouteDetails } from "./routes";
-import { HomeRoute } from "./routes/home-route";
-import { signInPath, SignInRoute } from "./routes/sign-in-route";
-import { UserService } from "./service/user-service";
-import { ColorPalette } from "./style/color-palete";
+import { Header } from './components/navigation/header';
+import { Menu } from './components/navigation/menu';
+import { StyledOverlay } from './components/styled/styled-overlay';
+import { useCurrentUserState } from './hooks/use-current-user-state';
+import { DeviceType, useDeviceSettings } from './hooks/use-device-settings';
+import { useModalState } from './hooks/use-modal-state';
+import { RouteDetails } from './routes';
+import { HomeRoute } from './routes/home-route';
+import { signInPath, SignInRoute } from './routes/sign-in-route';
+import { UserService } from './service/user-service';
+import { ColorPalette } from './style/color-palette';
 
 const useStyles = makeStyles({
   content: {
-    padding: "1rem",
-    overflowX: "scroll",
+    padding: '1rem',
+    overflowX: 'scroll',
     flexGrow: 1,
-    transition: "margin-left 225ms"
+    transition: 'margin-left 225ms',
   },
   appBar: {
-    display: "flex !important",
-    justifyContent: "center !important",
-    height: "48px !important",
-    zIndex: "2 !important"
-  }
+    display: 'flex !important',
+    justifyContent: 'center !important',
+    height: '48px !important',
+    zIndex: '2 !important',
+  },
 });
 
 interface MainContentProps {
@@ -39,7 +39,7 @@ interface MainContentProps {
 function MainContent(props: MainContentProps) {
   const styles = useStyles();
   const style: CSSProperties = {
-    marginLeft: `${props.menuWidth}px`
+    marginLeft: `${props.menuWidth}px`,
   };
   return (
     <div className={styles.content} style={style}>
@@ -66,7 +66,11 @@ function App() {
   const styles = useStyles();
   const [state, setState] = useState<AppState>({ menuVisible: false });
   const toggleMenu = useCallback(
-    () => setState((prevState) => ({ ...prevState, menuVisible: !prevState.menuVisible })),
+    () =>
+      setState((prevState) => ({
+        ...prevState,
+        menuVisible: !prevState.menuVisible,
+      })),
     []
   );
 
@@ -77,14 +81,14 @@ function App() {
   useEffect(() => {
     modalState.showModal({
       props: {
-        sx: { backgroundColor: "#00000000", boxShadow: "none" }
+        sx: { backgroundColor: '#00000000', boxShadow: 'none' },
       },
       element: (
         <CircularProgress
-          size={window.innerHeight < window.innerWidth ? "10vh" : "10vw"}
+          size={window.innerHeight < window.innerWidth ? '10vh' : '10vw'}
           sx={{ color: ColorPalette.primaryColorLight }}
         />
-      )
+      ),
     });
   }, []);
 
@@ -94,7 +98,10 @@ function App() {
     const userService = new UserService(currentUserState);
     userService.getUserData().then((userData) => {
       if (userData) {
-        currentUserState.setCurrentUser({ requestedTime: new Date(), userData });
+        currentUserState.setCurrentUser({
+          requestedTime: new Date(),
+          userData,
+        });
       } else {
         currentUserState.setCurrentUser(undefined);
       }
@@ -107,11 +114,15 @@ function App() {
   const persistentMenu = deviceSettings.deviceType >= DeviceType.TABLET;
 
   const modalStack = modalState.modalStack;
-  const modalProps = modalStack.length > 0 ? modalStack[modalStack.length - 1].props : {};
-  const modalElement = modalStack.length > 0 ? modalStack[modalStack.length - 1].element : <></>;
+  const modalProps =
+    modalStack.length > 0 ? modalStack[modalStack.length - 1].props : {};
+  const modalElement =
+    modalStack.length > 0 ? modalStack[modalStack.length - 1].element : <></>;
 
   return (
-    <Paper sx={{ minHeight: "100vh", backgroundColor: ColorPalette.backgroundGray }}>
+    <Paper
+      sx={{ minHeight: '100vh', backgroundColor: ColorPalette.backgroundGray }}
+    >
       <StyledOverlay visible={modalStack.length > 0} {...modalProps}>
         {modalElement}
       </StyledOverlay>
@@ -123,9 +134,11 @@ function App() {
           visible={state.menuVisible}
           width={menuWidth}
           onClose={persistentMenu ? undefined : toggleMenu}
-          variant={persistentMenu ? "persistent" : "temporary"}
+          variant={persistentMenu ? 'persistent' : 'temporary'}
         />
-        <MainContent menuWidth={persistentMenu && state.menuVisible ? menuWidth : 0} />
+        <MainContent
+          menuWidth={persistentMenu && state.menuVisible ? menuWidth : 0}
+        />
       </BrowserRouter>
     </Paper>
   );

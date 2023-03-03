@@ -1,4 +1,4 @@
-import { capitalCase } from "change-case";
+import { capitalCase } from 'change-case';
 
 interface NamingHook<T> {
   (value: T): string;
@@ -9,7 +9,10 @@ interface NamingHook<T> {
  * @param namingMap
  * @param defaultValue
  */
-export function useEnumNamingHook<T>(namingMap: { [key: string]: string } = {}, defaultValue = ""): NamingHook<T> {
+export function useEnumNamingHook<T>(
+  namingMap: { [key: string]: string } = {},
+  defaultValue = ''
+): NamingHook<T> {
   return (name: T) => {
     if (name === undefined) {
       return defaultValue;
@@ -21,7 +24,7 @@ export function useEnumNamingHook<T>(namingMap: { [key: string]: string } = {}, 
       return mappedName;
     }
     // Return a generated name
-    const parts = `${name}`.split("_").map((part) => capitalCase(part));
-    return parts.join(" ");
+    const parts = `${name}`.split('_').map((part) => capitalCase(part));
+    return parts.join(' ');
   };
 }

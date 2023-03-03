@@ -5,7 +5,10 @@
  * @param props
  * @param classes
  */
-export function useClasses(props: { className?: string }, ...classes: (string | undefined)[]): string {
+export function useClasses(
+  props: { className?: string },
+  ...classes: (string | undefined)[]
+): string {
   const combined: string[] = [];
   for (const className of classes) {
     if (className) {
@@ -15,5 +18,5 @@ export function useClasses(props: { className?: string }, ...classes: (string | 
   if (props.className) {
     combined.push(props.className);
   }
-  return combined.join(" ");
+  return combined.join(' ');
 }

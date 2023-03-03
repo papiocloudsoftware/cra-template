@@ -1,8 +1,11 @@
-import React from "react";
+import React from 'react';
 
-import { PublicRouteLinkProps, RouteLink } from "../../../components/navigation/links/route-link";
+import {
+  PublicRouteLinkProps,
+  RouteLink,
+} from '../../../components/navigation/links/route-link';
 
-export const sampleTool2Path = "/sample-tool-2";
+export const sampleTool2Path = '/sample-tool-2';
 
 export function SampleTool2Route() {
   return <div>TODO: Sample Tool 2</div>;

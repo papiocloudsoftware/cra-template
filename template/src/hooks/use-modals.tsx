@@ -1,26 +1,36 @@
-import { Theme, useTheme } from "@mui/material/styles";
-import React, { useCallback } from "react";
+import { Theme, useTheme } from '@mui/material/styles';
+import React, { useCallback } from 'react';
 
-import { SignInDialog } from "../components/user/sign-in-dialog";
-import { SignOutConfirmation } from "../components/user/sign-out-confirmation";
-import { ModalData, ModalState, ShowModalFunction, useModalState } from "./use-modal-state";
-import { useSxMerge } from "./use-sx-merge";
+import { SignInDialog } from '../components/user/sign-in-dialog';
+import { SignOutConfirmation } from '../components/user/sign-out-confirmation';
+import {
+  ModalData,
+  ModalState,
+  ShowModalFunction,
+  useModalState,
+} from './use-modal-state';
+import { useSxMerge } from './use-sx-merge';
 
 /**
  * Object to manage modal components
  */
-export interface Modals extends Omit<ModalState, "modalStack"> {
+export interface Modals extends Omit<ModalState, 'modalStack'> {
   readonly showConfirmation: ShowModalFunction;
   readonly signIn: (onClose?: () => void, stack?: boolean) => void;
   readonly signOut: (onClose?: () => void) => void;
 }
 
-function showConfirmation(modalState: ModalState, theme: Theme, modalData: ModalData, stack?: boolean) {
+function showConfirmation(
+  modalState: ModalState,
+  theme: Theme,
+  modalData: ModalData,
+  stack?: boolean
+) {
   const props = modalData.props || {};
   const sx = useSxMerge(
     theme,
     {
-      maxWidth: "500px"
+      maxWidth: '500px',
     },
     props.sx
   );
@@ -29,8 +39,8 @@ function showConfirmation(modalState: ModalState, theme: Theme, modalData: Modal
       ...modalData,
       props: {
         ...props,
-        sx
-      }
+        sx,
+      },
     },
     stack
   );
@@ -54,7 +64,7 @@ function SignInModal(props: SignInModalProps) {
 function signIn(modalState: ModalState, onClose?: () => void, stack?: boolean) {
   modalState.showModal(
     {
-      element: <SignInModal onClose={onClose} />
+      element: <SignInModal onClose={onClose} />,
     },
     stack
   );
@@ -77,7 +87,7 @@ function SignOutModal(props: SignOutModalProps) {
 
 function signOut(modalState: ModalState, theme: Theme, onClose?: () => void) {
   showConfirmation(modalState, theme, {
-    element: <SignOutModal onClose={onClose} />
+    element: <SignOutModal onClose={onClose} />,
   });
 }
 
@@ -107,6 +117,6 @@ export function useModals(): Modals {
     hideModal: modalState.hideModal,
     showConfirmation: showConfirmationCallback,
     signIn: signInCallback,
-    signOut: signOutCallback
+    signOut: signOutCallback,
   };
 }

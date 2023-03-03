@@ -1,2 +1,2 @@
-export * from "./banner-logo";
-export * from "./square-logo";
+export * from './banner-logo';
+export * from './square-logo';

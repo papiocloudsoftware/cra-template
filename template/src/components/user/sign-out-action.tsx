@@ -1,6 +1,6 @@
-import React, { forwardRef, HTMLAttributes, Ref, useCallback } from "react";
+import React, { forwardRef, HTMLAttributes, Ref, useCallback } from 'react';
 
-import { useModals } from "../../hooks/use-modals";
+import { useModals } from '../../hooks/use-modals';
 
 /**
  * Props to create SignOutAction
@@ -25,8 +25,16 @@ function InternalAction(props: InternalActionProps) {
   return <div {...props.actionProps} onClick={signOut} ref={props.innerRef} />;
 }
 
-export const SignOutAction = forwardRef<HTMLDivElement, SignOutActionProps>((props, ref) => {
-  return <InternalAction onClose={props.onClose} innerRef={ref} actionProps={props} />;
-});
+export const SignOutAction = forwardRef<HTMLDivElement, SignOutActionProps>(
+  (props, ref) => {
+    return (
+      <InternalAction
+        onClose={props.onClose}
+        innerRef={ref}
+        actionProps={props}
+      />
+    );
+  }
+);
 
-SignOutAction.displayName = "SignOutAction";
+SignOutAction.displayName = 'SignOutAction';

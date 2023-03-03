@@ -1,25 +1,32 @@
-import { Help } from "@mui/icons-material";
-import { Divider, ListItemIcon, ListItemText, Menu, MenuItem, MenuProps } from "@mui/material";
-import { makeStyles } from "@mui/styles";
-import React, { HTMLAttributes, useCallback, useState } from "react";
+import { Help } from '@mui/icons-material';
+import {
+  Divider,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  MenuProps,
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import React, { HTMLAttributes, useCallback, useState } from 'react';
 
-import { useCurrentUser } from "../../../hooks/use-current-user";
-import { useModals } from "../../../hooks/use-modals";
-import { CurrentUser } from "../../../service/user-types";
-import { SignInAction } from "../../user/sign-in-action";
-import { SignInIcon } from "../../user/sign-in-icon";
-import { SignOutIcon } from "../../user/sign-out-icon";
-import { UserIcon } from "../../user/user-icon";
-import { HeaderAction } from "./header-action";
+import { useCurrentUser } from '../../../hooks/use-current-user';
+import { useModals } from '../../../hooks/use-modals';
+import { CurrentUser } from '../../../service/user-types';
+import { SignInAction } from '../../user/sign-in-action';
+import { SignInIcon } from '../../user/sign-in-icon';
+import { SignOutIcon } from '../../user/sign-out-icon';
+import { UserIcon } from '../../user/user-icon';
+import { HeaderAction } from './header-action';
 
 const useStyles = makeStyles({
   action: {
-    paddingRight: "16px",
-    height: "100%"
+    paddingRight: '16px',
+    height: '100%',
   },
   menu: {
-    marginTop: "-6px"
-  }
+    marginTop: '-6px',
+  },
 });
 
 function userDetailsText(currentUser: CurrentUser): string {
@@ -66,25 +73,31 @@ interface UserManagementState {
 }
 
 export function UserManagement(props: UserManagementProps) {
-  const [state, setState] = useState<UserManagementState>({ menuAnchorElement: null });
+  const [state, setState] = useState<UserManagementState>({
+    menuAnchorElement: null,
+  });
   const styles = useStyles();
   const currentUser = useCurrentUser();
 
   const openMenu = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
-    console.log("Opening user menu!");
-    setState((prevState) => ({ ...prevState, menuAnchorElement: event.currentTarget }));
+    setState((prevState) => ({
+      ...prevState,
+      menuAnchorElement: event.currentTarget,
+    }));
   }, []);
   const closeMenu = useCallback(() => {
-    console.log("Closing user menu!");
     setState((prevState) => ({ ...prevState, menuAnchorElement: null }));
   }, []);
 
   if (!currentUser) {
     return (
       <div {...props}>
-        <SignInAction style={{ height: "100%" }}>
-          <HeaderAction description={"Sign in to begin"} className={styles.action}>
-            <SignInIcon style={{ marginRight: "12px" }} />
+        <SignInAction style={{ height: '100%' }}>
+          <HeaderAction
+            description={'Sign in to begin'}
+            className={styles.action}
+          >
+            <SignInIcon style={{ marginRight: '12px' }} />
             Sign In
           </HeaderAction>
         </SignInAction>
@@ -94,9 +107,13 @@ export function UserManagement(props: UserManagementProps) {
     const userDetails = userDetailsText(currentUser);
     return (
       <div {...props}>
-        <HeaderAction description={"Click to manage your account"} className={styles.action} onClick={openMenu}>
+        <HeaderAction
+          description={'Click to manage your account'}
+          className={styles.action}
+          onClick={openMenu}
+        >
           {userDetails}
-          <UserIcon style={{ marginLeft: "12px" }} />
+          <UserIcon style={{ marginLeft: '12px' }} />
         </HeaderAction>
         <UserMenu
           anchorEl={state.menuAnchorElement}

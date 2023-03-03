@@ -1,19 +1,28 @@
-import { KeyboardArrowRight } from "@mui/icons-material";
-import { makeStyles } from "@mui/styles";
-import { capitalCase } from "change-case";
-import React from "react";
-import { Routes, useLocation } from "react-router-dom";
+import { KeyboardArrowRight } from '@mui/icons-material';
+import { makeStyles } from '@mui/styles';
+import { capitalCase } from 'change-case';
+import React from 'react';
+import { Routes, useLocation } from 'react-router-dom';
 
-import { Home } from "../components/home";
-import { PublicRouteLinkProps, RouteLink } from "../components/navigation/links/route-link";
-import * as sampleTool1 from "./tools/sample-tool1";
-import * as sampleTool2 from "./tools/sample-tool2";
-import * as sampleTool3 from "./tools/sample-tool3";
+import { Home } from '../components/home';
+import {
+  PublicRouteLinkProps,
+  RouteLink,
+} from '../components/navigation/links/route-link';
+import * as sampleTool1 from './tools/sample-tool1';
+import * as sampleTool2 from './tools/sample-tool2';
+import * as sampleTool3 from './tools/sample-tool3';
 
 const useStyles = makeStyles({
   toolContent: {},
-  navigationPanel: {}
+  navigationPanel: {},
 });
+
+export const homePath = '/';
+
+export function HomeLink(props: PublicRouteLinkProps) {
+  return <RouteLink {...props} path={homePath} />;
+}
 
 interface NavigationPanelProps {
   readonly path: string;
@@ -21,7 +30,7 @@ interface NavigationPanelProps {
 
 function NavigationPanel(props: NavigationPanelProps) {
   const styles = useStyles();
-  const parts = props.path.split("/").filter((part) => part.trim().length > 0);
+  const parts = props.path.split('/').filter((part) => part.trim().length > 0);
 
   const currParts: string[] = [];
 
@@ -31,7 +40,7 @@ function NavigationPanel(props: NavigationPanelProps) {
       {parts.map((part) => {
         currParts.push(part);
         return (
-          <RouteLink key={part} path={currParts.join("/")}>
+          <RouteLink key={part} path={currParts.join('/')}>
             <KeyboardArrowRight />
             {capitalCase(part)}
           </RouteLink>
@@ -44,7 +53,7 @@ function NavigationPanel(props: NavigationPanelProps) {
 export function HomeRoute() {
   const styles = useStyles();
   const location = useLocation();
-  if (location.pathname === "" || location.pathname === "/") {
+  if (location.pathname === '' || location.pathname === '/') {
     return <Home />;
   }
   return (
@@ -57,10 +66,4 @@ export function HomeRoute() {
       </Routes>
     </div>
   );
-}
-
-export const homePath = "/";
-
-export function HomeLink(props: PublicRouteLinkProps) {
-  return <RouteLink {...props} path={homePath} />;
 }

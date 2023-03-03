@@ -1,17 +1,17 @@
-import { makeStyles } from "@mui/styles";
-import React from "react";
-import { Link, LinkProps } from "react-router-dom";
+import { makeStyles } from '@mui/styles';
+import React from 'react';
+import { Link, LinkProps } from 'react-router-dom';
 
-import { useClasses } from "../../hooks/use-classes";
+import { useClasses } from '../../hooks/use-classes';
 
 export const useStyles = makeStyles({
   link: {
-    color: "inherit",
-    textDecoration: "none",
-    "&:hover": {
-      cursor: "pointer"
-    }
-  }
+    color: 'inherit',
+    textDecoration: 'none',
+    '&:hover': {
+      cursor: 'pointer',
+    },
+  },
 });
 
 export function StyledRouteLink(props: LinkProps) {

@@ -1,6 +1,6 @@
-import React, { PropsWithChildren, useContext, useState } from "react";
+import React, { PropsWithChildren, useContext, useState } from 'react';
 
-import { CurrentUser } from "../service/user-types";
+import { CurrentUser } from '../service/user-types';
 
 type Callback = (prevState?: CurrentUser) => CurrentUser;
 
@@ -13,17 +13,24 @@ export interface CurrentUserState {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-const CurrentUserContext = React.createContext<CurrentUserState>({ setCurrentUser: () => {} });
+const CurrentUserContext = React.createContext<CurrentUserState>({
+  setCurrentUser: () => {},
+});
 
 export function useCurrentUserState(): CurrentUserState {
   return useContext(CurrentUserContext);
 }
 
 export function CurrentUserStateProvider(props: PropsWithChildren<unknown>) {
-  const [currentUser, setCurrentUser] = useState<CurrentUser | undefined>(undefined);
+  const [currentUser, setCurrentUser] =
+    useState<CurrentUser | undefined>(undefined);
   const currentUserState: CurrentUserState = {
     currentUser,
-    setCurrentUser
+    setCurrentUser,
   };
-  return <CurrentUserContext.Provider value={currentUserState}>{props.children}</CurrentUserContext.Provider>;
+  return (
+    <CurrentUserContext.Provider value={currentUserState}>
+      {props.children}
+    </CurrentUserContext.Provider>
+  );
 }

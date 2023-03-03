@@ -1,13 +1,13 @@
-import { LinkBaseProps } from "@mui/material";
-import React from "react";
+import { LinkBaseProps } from '@mui/material';
+import React from 'react';
 
-import { useClasses } from "../../../hooks/use-classes";
-import { StyledRouteLink } from "../../styled/styled-route-link";
+import { useClasses } from '../../../hooks/use-classes';
+import { StyledRouteLink } from '../../styled/styled-route-link';
 
 /**
  * Properties for an application link to a route
  */
-export interface PublicRouteLinkProps extends Omit<LinkBaseProps, "to"> {
+export interface PublicRouteLinkProps extends Omit<LinkBaseProps, 'to'> {
   readonly selectedClassName?: string;
 }
 

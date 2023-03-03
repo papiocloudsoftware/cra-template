@@ -1,22 +1,22 @@
-import { DrawerProps, Toolbar } from "@mui/material";
-import Drawer from "@mui/material/Drawer";
-import { makeStyles } from "@mui/styles";
-import React from "react";
+import { DrawerProps, Toolbar } from '@mui/material';
+import Drawer from '@mui/material/Drawer';
+import { makeStyles } from '@mui/styles';
+import React from 'react';
 
-import { MenuItems } from "./menu-items";
+import { MenuItems } from './menu-items';
 
 const useStyles = makeStyles({
   menu: {
-    "& a": {
-      "&:hover": { textDecoration: "none" },
-      "&:link": { textDecoration: "none" },
-      "&:visited": { textDecoration: "none" },
-      "&:active": { textDecoration: "none" }
-    }
-  }
+    '& a': {
+      '&:hover': { textDecoration: 'none' },
+      '&:link': { textDecoration: 'none' },
+      '&:visited': { textDecoration: 'none' },
+      '&:active': { textDecoration: 'none' },
+    },
+  },
 });
 
-interface MenuProps extends Pick<DrawerProps, "variant"> {
+interface MenuProps extends Pick<DrawerProps, 'variant'> {
   readonly visible: boolean;
   readonly width: number;
   readonly onClose?: () => void;
@@ -34,11 +34,17 @@ export function Menu(props: MenuProps) {
       sx={{
         width: `${props.width}px`,
         zIndex: 1,
-        [`& .MuiDrawer-paper`]: { width: `${props.width}px`, boxSizing: "border-box", zIndex: 1 }
+        [`& .MuiDrawer-paper`]: {
+          width: `${props.width}px`,
+          boxSizing: 'border-box',
+          zIndex: 1,
+        },
       }}
     >
       <Toolbar />
-      <MenuItems onNavigate={props.variant === "temporary" ? props.onClose : undefined} />
+      <MenuItems
+        onNavigate={props.variant === 'temporary' ? props.onClose : undefined}
+      />
     </Drawer>
   );
 }
